@@ -98,16 +98,19 @@ function bindUploadEvents() {
   }
 
   // Demo Sample Resume Button
-  document.getElementById('btn-use-sample-resume').addEventListener('click', () => {
+  document.getElementById('btn-use-sample-resume').addEventListener('click', async () => {
     const sampleText = window.SAMPLE_DATA.sampleResumeText;
+    const filename = 'Sample_Nandan_Resume.pdf';
+    window.AppState.setLoading(true, 'Extracting sample candidate profile...');
     window.AppState.setState({
       resumeFile: null,
-      resumeFileName: 'Sample_Nandan_Resume.pdf',
+      resumeFileName: filename,
       resumeFileType: 'application/pdf',
       resumeText: sampleText,
       resumeSource: 'sample',
       errorState: null
     });
+    await extractAndStoreProfile(sampleText, filename, 'sample');
     window.AppState.setScreen('job');
   });
 
@@ -119,20 +122,23 @@ function bindUploadEvents() {
     }
   });
 
-  document.getElementById('btn-save-manual-text').addEventListener('click', () => {
+  document.getElementById('btn-save-manual-text').addEventListener('click', async () => {
     const manualText = document.getElementById('manual-resume-textarea').value;
     if (!manualText || manualText.trim().length < 20) {
       window.AppState.setError('Resume Text Too Short', 'Please paste at least 20 characters of resume text to proceed with ATS analysis.');
       return;
     }
+    const filename = 'Pasted_Resume_Text.txt';
+    window.AppState.setLoading(true, 'Extracting profile from pasted resume text...');
     window.AppState.setState({
       resumeFile: null,
-      resumeFileName: 'Pasted_Resume_Text.txt',
+      resumeFileName: filename,
       resumeFileType: 'text/plain',
       resumeText: manualText.trim(),
       resumeSource: 'manual',
       errorState: null
     });
+    await extractAndStoreProfile(manualText.trim(), filename, 'manual');
     window.AppState.setScreen('job');
   });
 
@@ -149,14 +155,48 @@ function bindUploadEvents() {
   }
 
   // Upload Continue Action
-  document.getElementById('btn-upload-continue').addEventListener('click', () => {
+  document.getElementById('btn-upload-continue').addEventListener('click', async () => {
     const state = window.AppState.getState();
     if (!state.resumeText || state.resumeText.trim().length < 20) {
       window.AppState.setError('Extracted Text Missing or Too Short', 'Please select a valid resume file or paste text manually before continuing.');
       return;
     }
+    if (!state.candidateProfile) {
+      window.AppState.setLoading(true, 'Extracting candidate profile from resume text...');
+      await extractAndStoreProfile(state.resumeText, state.resumeFileName || 'resume.pdf', state.resumeSource || 'file');
+    }
     window.AppState.setScreen('job');
   });
+}
+
+// Helper to extract & store Candidate Profile via REST API / Engine
+async function extractAndStoreProfile(resumeText, filename = 'resume.pdf', source = 'file') {
+  try {
+    let profile = null;
+    try {
+      const apiRes = await window.AiService.fetchFromApi('/resume/parse', {
+        resumeText,
+        filename
+      });
+      if (apiRes && apiRes.success && apiRes.data && apiRes.data.profile) {
+        profile = apiRes.data.profile;
+      }
+    } catch (e) {
+      console.warn('API resume parse notice (falling back to local engine):', e);
+    }
+
+    window.AppState.setState({
+      resumeFileName: filename,
+      resumeText,
+      resumeSource: source,
+      candidateProfile: profile,
+      isLoading: false
+    });
+    return profile;
+  } catch (err) {
+    window.AppState.setLoading(false);
+    console.error('Profile extraction error:', err);
+  }
 }
 
 // Process Uploaded File with PDF.js or Mammoth.js
@@ -168,7 +208,7 @@ async function handleSelectedFile(file) {
     return;
   }
 
-  window.AppState.setLoading(true, `Extracting readable text from ${file.name}...`);
+  window.AppState.setLoading(true, `Extracting readable text & profile from ${file.name}...`);
   window.AppState.clearError();
 
   try {
@@ -178,9 +218,10 @@ async function handleSelectedFile(file) {
       resumeFileName: file.name,
       resumeFileType: file.type || 'document',
       resumeText: extractedText,
-      resumeSource: 'file',
-      isLoading: false
+      resumeSource: 'file'
     });
+
+    await extractAndStoreProfile(extractedText, file.name, 'file');
   } catch (err) {
     window.AppState.setLoading(false);
     window.AppState.setError(`Text Extraction Failed (${file.name})`, err.message, () => {

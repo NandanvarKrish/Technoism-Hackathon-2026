@@ -14,6 +14,7 @@ class StateStore {
       resumeFileType: '',
       resumeText: '',
       resumeSource: 'none', // 'file' | 'manual' | 'sample'
+      candidateProfile: null, // Dynamic extracted profile: { name, education, skills, programmingLanguages, frameworks, databases, tools, projects, experience, internships, certifications, achievements }
       
       // Job Description Context
       targetRole: '',
@@ -107,6 +108,7 @@ class StateStore {
         resumeFileName: this.state.resumeFileName,
         resumeText: this.state.resumeText,
         resumeSource: this.state.resumeSource,
+        candidateProfile: this.state.candidateProfile,
         targetRole: this.state.targetRole,
         jobDescription: this.state.jobDescription,
         atsResult: this.state.atsResult,
