@@ -220,6 +220,7 @@ async function extractAndStoreProfile(resumeText, filename = 'resume.pdf', sourc
     }
 
     const updates = {
+      isWorkflowStarted: true,
       resumeFileName: filename,
       resumeText,
       resumeSource: source,

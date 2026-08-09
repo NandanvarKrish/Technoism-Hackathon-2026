@@ -7,6 +7,7 @@ class StateStore {
     // Initial State Structure
     this.state = {
       currentScreen: 'landing', // 'landing' | 'upload' | 'ats' | 'interview' | 'coding' | 'report'
+      isWorkflowStarted: false,
       
       // Resume & Candidate Data
       resumeFile: null,
@@ -73,7 +74,20 @@ class StateStore {
 
   // Set Screen View
   setScreen(screenId) {
-    const validScreens = ['landing', 'upload', 'job', 'ats', 'interview', 'report'];
+    const validScreens = ['landing', 'upload', 'job', 'ats', 'interview', 'coding', 'report'];
+    
+    // Route locking check: restrict workflow routes until analysis is started
+    const isStarted = Boolean(
+      this.state.isWorkflowStarted || 
+      (this.state.resumeText && this.state.resumeText.trim().length > 0) || 
+      this.state.atsResult || 
+      this.state.candidateProfile
+    );
+
+    if (!isStarted && ['ats', 'interview', 'coding', 'report'].includes(screenId)) {
+      screenId = 'landing';
+    }
+
     if (validScreens.includes(screenId)) {
       this.setState({ currentScreen: screenId, errorState: null });
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -102,6 +116,7 @@ class StateStore {
     try {
       const serializableState = {
         currentScreen: this.state.currentScreen,
+        isWorkflowStarted: this.state.isWorkflowStarted,
         resumeFileName: this.state.resumeFileName,
         resumeText: this.state.resumeText,
         resumeSource: this.state.resumeSource,
@@ -142,6 +157,7 @@ class StateStore {
     localStorage.removeItem('technoism_app_state');
     this.state = {
       currentScreen: 'landing',
+      isWorkflowStarted: false,
       resumeFile: null,
       resumeFileName: '',
       resumeFileType: '',
@@ -149,6 +165,8 @@ class StateStore {
       resumeSource: 'none',
       targetRole: '',
       jobDescription: '',
+      candidateProfile: null,
+      detectedRole: null,
       atsResult: null,
       interviewSetup: { questionCount: 3 },
       interviewStage: 'setup',

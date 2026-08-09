@@ -30,9 +30,22 @@ window.UIController = {
     });
   },
 
-  // Update Stepper Progress Pills in Nav Header
+  // Update Stepper Progress Bar & Workflow Navigation Visibility in Header
   renderStepperProgress(currentScreen) {
-    const stepMap = { landing: 1, upload: 2, job: 3, ats: 4, interview: 5, report: 6 };
+    const state = window.AppState ? window.AppState.getState() : {};
+    const isWorkflowStarted = Boolean(
+      state.isWorkflowStarted || 
+      (state.resumeText && state.resumeText.trim().length > 0) || 
+      state.atsResult || 
+      state.candidateProfile
+    );
+
+    const stepperElem = document.querySelector('.app-stepper');
+    if (stepperElem) {
+      stepperElem.style.display = isWorkflowStarted ? 'flex' : 'none';
+    }
+
+    const stepMap = { landing: 1, upload: 2, ats: 3, interview: 4, coding: 5, report: 6 };
     const currentStepNum = stepMap[currentScreen] || 1;
 
     const pills = document.querySelectorAll('.step-pill');
