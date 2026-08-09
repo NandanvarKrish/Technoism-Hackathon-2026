@@ -188,50 +188,93 @@ def extract_experience(exp_lines):
 
     return exp_list
 
-def detect_target_role_and_job_description(profile, raw_text):
-    text_lower = raw_text.lower()
-    skills = [s.lower() for s in profile.get("skills", [])]
-    langs = [l.lower() for l in profile.get("programmingLanguages", [])]
-    frameworks = [f.lower() for f in profile.get("frameworks", [])]
+def extract_target_role_and_job_profile(raw_text, profile):
+    lines = [l.strip() for l in raw_text.split("\n") if l.strip()]
+    
+    detected_title = ""
+    confidence = 0.70
+    evidence = []
 
-    # Role detection logic
-    if any(k in text_lower for k in ["data engineer", "pyspark", "etl", "data warehouse", "pipeline"]):
-        detected_role = "Data & Backend Engineer"
-    elif any(k in text_lower for k in ["react", "frontend", "html5", "css3", "tailwind", "vue", "angular"]):
-        detected_role = "Associate Frontend Developer"
-    elif any(k in text_lower for k in ["full-stack", "fullstack", "node.js", "express", "react"]):
-        detected_role = "Full-Stack Software Engineer"
-    elif any(k in text_lower for k in ["machine learning", "ai", "pytorch", "tensorflow", "nlp"]):
-        detected_role = "AI / Machine Learning Engineer"
-    else:
-        detected_role = "Software Development Engineer"
+    # Priority 1: Check headline / top 6 lines for explicit professional title
+    for line in lines[:6]:
+        if any(h in line.upper() for h in ["RESUME", "CURRICULUM", "EMAIL", "PHONE", "PAGE", "HTTP", "LOCATION", "SUMMARY"]):
+            continue
+        parts = re.split(r'[|•,]', line)
+        for part in parts:
+            p_clean = part.strip()
+            if re.search(r'\b(Developer|Engineer|Analyst|Specialist|Architect|Scientist|Consultant|Designer|Lead)\b', p_clean, re.IGNORECASE):
+                if not re.match(r'^(Student|Computer Science Student)$', p_clean, re.IGNORECASE):
+                    detected_title = p_clean
+                    confidence = 0.96
+                    evidence.append(f"Resume headline explicitly states: '{p_clean}'")
+                    break
+        if detected_title:
+            break
 
-    # Build tailored job description matching extracted candidate profile
-    langs_str = ", ".join(profile.get("programmingLanguages", ["JavaScript", "Python"])[:4]) or "JavaScript, Python"
-    frameworks_str = ", ".join(profile.get("frameworks", ["React", "Node.js"])[:3]) or "React, Node.js"
-    databases_str = ", ".join(profile.get("databases", ["PostgreSQL", "MongoDB"])[:2]) or "PostgreSQL, MongoDB"
-    tools_str = ", ".join(profile.get("tools", ["Git", "GitHub"])[:2]) or "Git, GitHub"
-    top_skills_str = ", ".join(profile.get("skills", ["Software Engineering", "REST APIs"])[:5]) or "Software Engineering, REST APIs"
+    # Priority 2: Check Summary or recent experience titles
+    if not detected_title:
+        exp_list = profile.get("experience", [])
+        if exp_list and exp_list[0].get("title"):
+            detected_title = exp_list[0]["title"]
+            confidence = 0.85
+            evidence.append(f"Most recent experience title: '{detected_title}'")
 
-    job_desc = f"""Role: {detected_role}
-Company: Target Engineering Team
-Location: Hybrid / Remote
+    # Priority 3: Skill & specialization consistency inference
+    if not detected_title:
+        skills_set = set([s.lower() for s in profile.get("skills", [])])
+        if "react" in skills_set or "html5" in skills_set or "frontend" in skills_set:
+            detected_title = "Frontend Developer"
+            confidence = 0.75
+            evidence.append("Inferred from frontend skills (React, HTML5, CSS3)")
+        elif "pyspark" in skills_set or "pandas" in skills_set or "etl" in skills_set:
+            detected_title = "Python Data Analyst"
+            confidence = 0.75
+            evidence.append("Inferred from data skills (Python, Pandas, SQL)")
+        elif "java" in skills_set and "spring boot" in skills_set:
+            detected_title = "Java Backend Developer"
+            confidence = 0.75
+            evidence.append("Inferred from Java & Spring Boot skills")
+        else:
+            detected_title = "Software Engineer"
+            confidence = 0.60
+            evidence.append("General software development skill set detected")
 
-Job Overview:
-We are seeking a enthusiastic {detected_role} to join our core product engineering team. You will be responsible for creating modern, high-performance software applications, designing API integrations, and maintaining responsive web and data workflows.
+    # STRICT GROUNDING: Requirements contain ONLY technologies present in the resume
+    langs = profile.get("programmingLanguages", [])
+    frameworks = profile.get("frameworks", [])
+    databases = profile.get("databases", [])
+    tools = profile.get("tools", [])
+    all_skills = profile.get("skills", [])
 
-Key Responsibilities:
-- Develop clean, maintainable code using {langs_str}.
-- Collaborate with engineering teams to build modular applications using {frameworks_str}.
-- Design and query relational or non-relational databases including {databases_str}.
-- Maintain version control and release workflows using {tools_str}.
-- Optimize application performance, scalability, and security across production deployments.
+    tech_str = ", ".join(all_skills[:8]) if all_skills else "software development fundamentals"
+    summary_desc = f"{detected_title} with experience in {tech_str}. Background in project implementation, problem solving, and version control workflows."
 
-Requirements & Qualifications:
-- Solid technical foundation and hands-on experience in {top_skills_str}.
-- Strong problem-solving mindset, familiarity with software design patterns, and eagerness to learn."""
+    job_profile = {
+        "summary": summary_desc,
+        "technicalRequirements": all_skills,
+        "programmingLanguages": langs,
+        "frameworks": frameworks,
+        "databases": databases,
+        "tools": tools,
+        "developmentSkills": [s for s in all_skills if s not in langs and s not in frameworks and s not in databases and s not in tools],
+        "softSkills": ["Problem Solving", "Teamwork", "Clean Code", "Communication"],
+        "experienceRequirements": ["Hands-on project or internship experience"],
+        "educationRequirements": [e.g.get("degree", "Degree in Computer Science or related field") for e.g in profile.get("education", [])] or ["Degree in Computer Science or related field"]
+    }
 
-    return detected_role, job_desc
+    req_lines = [f"- {s}" for s in all_skills[:12]] if all_skills else ["- Software Engineering fundamentals"]
+    formatted_desc = f"Role: {detected_title}\n\nResume-Derived Profile:\n{summary_desc}\n\nTechnical Requirements:\n" + "\n".join(req_lines)
+
+    return {
+        "targetRole": {
+            "title": detected_title,
+            "confidence": confidence,
+            "evidence": evidence
+        },
+        "jobProfile": job_profile,
+        "source": "resume-derived",
+        "recommendedJobDescription": formatted_desc
+    }
 
 def parse_resume_to_candidate_profile(raw_text, filename="resume.pdf"):
     if not raw_text or len(raw_text.strip()) < 10:
@@ -283,14 +326,18 @@ def parse_resume_to_candidate_profile(raw_text, filename="resume.pdf"):
         "achievements": achievements
     }
 
-    detected_role, recommended_jd = detect_target_role_and_job_description(profile, raw_text)
-    profile["detectedRole"] = detected_role
-    profile["recommendedJobDescription"] = recommended_jd
+    derived_data = extract_target_role_and_job_profile(raw_text, profile)
+    profile["detectedRole"] = derived_data["targetRole"]["title"]
+    profile["targetRoleObj"] = derived_data["targetRole"]
+    profile["jobProfileObj"] = derived_data["jobProfile"]
+    profile["recommendedJobDescription"] = derived_data["recommendedJobDescription"]
+    profile["profileSource"] = "resume-derived"
 
     return {
         "success": True,
         "filename": filename,
         "profile": profile,
+        "derived": derived_data,
         "extractedText": raw_text
     }
 

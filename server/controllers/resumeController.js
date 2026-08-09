@@ -131,6 +131,25 @@ Requirements & Qualifications:
 - Solid technical foundation and hands-on experience in ${skills.slice(0, 5).join(', ') || 'Software Engineering'}.
 - Strong problem-solving mindset and eagerness to learn.`;
 
+  const targetRoleObj = {
+    title: detectedRole,
+    confidence: lower.includes('full-stack') || lower.includes('frontend') ? 0.96 : 0.75,
+    evidence: [`Resume content indicates specialization in ${detectedRole}`]
+  };
+
+  const jobProfileObj = {
+    summary: `Resume-derived profile for ${detectedRole}`,
+    technicalRequirements: skills,
+    programmingLanguages,
+    frameworks,
+    databases,
+    tools,
+    developmentSkills: skills.filter(s => !programmingLanguages.includes(s) && !frameworks.includes(s) && !databases.includes(s) && !tools.includes(s)),
+    softSkills: ['Problem Solving', 'Teamwork', 'Clean Code'],
+    experienceRequirements: ['Hands-on software development experience'],
+    educationRequirements: education.map(e => e.degree)
+  };
+
   return {
     name,
     email,
@@ -147,6 +166,11 @@ Requirements & Qualifications:
     certifications: [],
     achievements: [],
     detectedRole,
+    targetRoleObj,
+    jobProfileObj,
+    targetRoleConfidence: targetRoleObj.confidence,
+    targetRoleEvidence: targetRoleObj.evidence,
+    profileSource: "resume-derived",
     recommendedJobDescription
   };
 }

@@ -190,6 +190,7 @@ async function extractAndStoreProfile(resumeText, filename = 'resume.pdf', sourc
       resumeText,
       resumeSource: source,
       candidateProfile: profile,
+      profileSource: 'resume-derived',
       isLoading: false
     };
 
@@ -198,6 +199,12 @@ async function extractAndStoreProfile(resumeText, filename = 'resume.pdf', sourc
     }
     if (profile && profile.recommendedJobDescription) {
       updates.jobDescription = profile.recommendedJobDescription;
+    }
+    if (profile && profile.targetRoleConfidence) {
+      updates.targetRoleConfidence = profile.targetRoleConfidence;
+    }
+    if (profile && profile.targetRoleEvidence) {
+      updates.targetRoleEvidence = profile.targetRoleEvidence;
     }
 
     window.AppState.setState(updates);
@@ -247,17 +254,25 @@ function bindJobDescriptionEvents() {
   const checkInputs = () => {
     const roleVal = roleInput.value;
     const descVal = descTextarea.value;
+    const currentState = window.AppState.getState();
     
+    // Track user edit mode
+    let source = currentState.profileSource || 'resume-derived';
+    if (source === 'resume-derived' && (roleVal !== currentState.targetRole || descVal !== currentState.jobDescription)) {
+      source = 'resume-derived-edited';
+    }
+
     window.AppState.setState({
       targetRole: roleVal,
-      jobDescription: descVal
+      jobDescription: descVal,
+      profileSource: source
     });
   };
 
   roleInput.addEventListener('input', checkInputs);
   descTextarea.addEventListener('input', checkInputs);
 
-  // Load Sample Job Description
+  // Load Sample Job Description (Actual Company JD Priority)
   document.getElementById('btn-use-sample-job').addEventListener('click', () => {
     const sampleDesc = window.SAMPLE_DATA.sampleJobDescription;
     const sampleRole = 'Associate Frontend & Full-Stack Developer';
@@ -268,6 +283,7 @@ function bindJobDescriptionEvents() {
     window.AppState.setState({
       targetRole: sampleRole,
       jobDescription: sampleDesc,
+      profileSource: 'actual-jd',
       errorState: null
     });
   });
