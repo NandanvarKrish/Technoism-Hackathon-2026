@@ -255,7 +255,10 @@ async function handleSelectedFile(file) {
       resumeFileName: file.name,
       resumeFileType: file.type || 'document',
       resumeText: extractedText,
-      resumeSource: 'file'
+      resumeSource: 'file',
+      // Clear prior ATS result so the new resume triggers a fresh analysis
+      atsResult: null,
+      candidateProfile: null
     });
 
     await runAutomaticAtsAnalysis(extractedText, file.name, 'file');
@@ -276,7 +279,23 @@ function bindAtsEvents() {
     });
     window.AppState.setScreen('interview');
   });
+
+  // Retry Analysis — re-runs ATS from current resume text when backend was offline
+  const retryBtn = document.getElementById('btn-ats-retry');
+  if (retryBtn) {
+    retryBtn.addEventListener('click', async () => {
+      const state = window.AppState.getState();
+      if (!state.resumeText || state.resumeText.trim().length < 15) {
+        window.AppState.setError('No Resume Text', 'Please upload a resume first before retrying ATS analysis.');
+        return;
+      }
+      // Clear prior (offline) result so fresh analysis runs
+      window.AppState.setState({ atsResult: null });
+      await runAutomaticAtsAnalysis(state.resumeText, state.resumeFileName || 'resume.pdf', state.resumeSource || 'file');
+    });
+  }
 }
+
 
 // S05 Mock Interview Setup & Room Handlers
 function bindInterviewEvents() {

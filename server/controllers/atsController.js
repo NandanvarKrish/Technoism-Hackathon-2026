@@ -176,22 +176,22 @@ exports.analyzeAts = async (req, res) => {
     // 1. If GEMINI_API_KEY is present, perform live Gemini AI ATS Analysis
     if (apiKey && apiKey.trim().length > 10) {
       try {
+        const detectedRole = candidateProfile?.detectedRole || targetRole || 'Software Development Candidate';
         const prompt = `You are an expert ATS (Applicant Tracking System) Screener & Talent Evaluator.
-Analyze the candidate's Resume Text and Candidate Profile JSON against the target role requirements.
+Analyze the candidate's Resume Text and Candidate Profile JSON to evaluate their overall professional readiness, technical depth, and ATS resume quality.
 
 EVALUATION TASK:
-Analyze:
-1. Required skills
-2. Preferred skills
-3. Tools & Technologies
-4. Experience requirements
-5. Education requirements
-6. Responsibilities
-7. Resume evidence
-8. Missing requirements
-9. Partial matches
-10. Strengths
-11. Recommendations
+1. Identify the candidate's primary professional role (detectedRole) from their resume headline, experience, and skills.
+2. Calculate an overall ATS Resume Readiness Score (0-100).
+3. Evaluate 7 weighted categories:
+   - Resume Structure (15%): Layout, section organization, readability, contact info
+   - Technical Skills (20%): Breadth & depth of programming languages, frameworks, databases, tools
+   - Projects (20%): Technical complexity, execution depth, project scope
+   - Experience & Internships (15%): Industry experience, responsibilities, practical work
+   - Education (10%): Degree relevance, academic background
+   - Achievements & Impact (10%): Quantifiable metric outcomes (% improvements, scale)
+   - Role Readiness (10%): Overall career readiness for their detected role
+4. Identify matched skills, missing key skills for role growth, strengths, and actionable resume suggestions.
 
 CANDIDATE RESUME TEXT:
 ${resumeText}
@@ -199,16 +199,13 @@ ${resumeText}
 CANDIDATE PROFILE JSON:
 ${JSON.stringify(candidateProfile || {})}
 
-TARGET ROLE:
-${targetRole || candidateProfile?.detectedRole || 'Software Development Engineer'}
+DETECTED ROLE:
+${detectedRole}
 
-JOB DESCRIPTION:
-${jobDescription || 'Standard requirements for candidate professional domain'}
-
-Return ONLY a JSON object matching this exact schema:
+Return ONLY a JSON object matching this exact schema (no Markdown, no extra text):
 {
   "score": 85,
-  "targetRole": "${targetRole || candidateProfile?.detectedRole || 'Software Development Engineer'}",
+  "targetRole": "${detectedRole}",
   "categories": [
     { "name": "Resume Structure", "weight": "15%", "score": 90, "weightedScore": 14, "explanation": "Section layout and scannability." },
     { "name": "Technical Skills", "weight": "20%", "score": 85, "weightedScore": 17, "explanation": "Languages, frameworks, databases, and developer tools." },
@@ -220,10 +217,10 @@ Return ONLY a JSON object matching this exact schema:
   ],
   "matchedSkills": ["JavaScript", "React.js", "Node.js", "SQL"],
   "partialMatches": ["TypeScript"],
-  "missingSkills": ["Docker", "AWS"],
-  "strengths": ["Clear project evidence building responsive applications...", "..."],
+  "missingSkills": ["Cloud Infrastructure (AWS/Docker)", "Quantifiable metric outcomes"],
+  "strengths": ["Clear project evidence building web applications...", "..."],
   "suggestions": ["Incorporate quantifiable impact metrics in project bullets...", "..."],
-  "evidence": ["Developed a real-time web portal with React.js..."],
+  "evidence": ["Developed applications with modern web stack..."],
   "semanticSummary": "High-level summary of candidate ATS readiness and technical alignment."
 }`;
 
@@ -272,8 +269,16 @@ Return ONLY a JSON object matching this exact schema:
       }
     }
 
-    // 2. Fallback Resume ATS Engine (Explicitly marked as API Offline Fallback)
+    // 2. Fallback (Gemini unavailable — explicitly labeled, NOT presented as AI success)
     const fallbackResult = evaluateDeterministicAts(resumeText, candidateProfile, targetRole, jobDescription);
+    // Override to ensure client shows retry option, not fake AI score
+    fallbackResult.isFallback = true;
+    fallbackResult.aiEnhanced = false;
+    fallbackResult.score = null;
+    fallbackResult.overallScore = null;
+    fallbackResult.matchScore = null;
+    fallbackResult.source = 'AI Analysis Unavailable (Gemini Offline)';
+    fallbackResult.fallbackReason = 'Gemini API key missing or call failed. Please set GEMINI_API_KEY and retry.';
 
     res.status(200).json({
       success: true,

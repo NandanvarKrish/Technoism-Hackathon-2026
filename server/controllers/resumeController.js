@@ -105,13 +105,46 @@ function parseProfileFromTextNode(text, filename = 'resume.pdf') {
     }
   }
 
-  let detectedRole = 'Software Development Engineer';
-  if (lower.includes('data engineer') || lower.includes('pyspark') || lower.includes('etl')) {
-    detectedRole = 'Data & Backend Engineer';
-  } else if (lower.includes('react') || lower.includes('frontend') || lower.includes('html5')) {
-    detectedRole = 'Associate Frontend Developer';
-  } else if (lower.includes('full-stack') || lower.includes('node.js')) {
-    detectedRole = 'Full-Stack Software Engineer';
+  let detectedRole = '';
+
+  // Tier 1: Check headline / top title lines
+  const topLines = lines.slice(0, 10);
+  for (const line of topLines) {
+    if (/developer|engineer|analyst|architect|scientist|designer|consultant|specialist|lead|manager|administrator/i.test(line)) {
+      const candidateTitle = line.split('|')[0].split('•')[0].split('-')[0].trim();
+      if (candidateTitle.length >= 4 && candidateTitle.length <= 60 && !/@|\.com|http/i.test(candidateTitle)) {
+        detectedRole = candidateTitle;
+        break;
+      }
+    }
+  }
+
+  // Tier 2: Check most recent experience title
+  if (!detectedRole && experience.length > 0 && experience[0].title) {
+    detectedRole = experience[0].title;
+  }
+
+  // Tier 3: Domain & Skill Based Inference
+  if (!detectedRole) {
+    if (lower.includes('data analyst') || (lower.includes('pandas') && lower.includes('power bi'))) {
+      detectedRole = 'Python Data Analyst';
+    } else if (lower.includes('data engineer') || lower.includes('pyspark') || lower.includes('etl')) {
+      detectedRole = 'Data & Backend Engineer';
+    } else if (lower.includes('java') && (lower.includes('spring') || lower.includes('springboot'))) {
+      detectedRole = 'Java Backend Developer';
+    } else if (lower.includes('python') && (lower.includes('django') || lower.includes('fastapi'))) {
+      detectedRole = 'Python Backend Engineer';
+    } else if (lower.includes('full-stack') || (lower.includes('react') && lower.includes('node'))) {
+      detectedRole = 'Full-Stack Software Engineer';
+    } else if (lower.includes('react') || lower.includes('frontend') || lower.includes('vue')) {
+      detectedRole = 'Frontend Developer';
+    } else if (lower.includes('android') || lower.includes('flutter') || lower.includes('ios')) {
+      detectedRole = 'Mobile Application Developer';
+    } else if (lower.includes('devops') || lower.includes('kubernetes') || lower.includes('aws')) {
+      detectedRole = 'DevOps & Cloud Engineer';
+    } else {
+      detectedRole = 'Software Development Engineer';
+    }
   }
 
   const recommendedJobDescription = `Role: ${detectedRole}

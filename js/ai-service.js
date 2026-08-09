@@ -351,95 +351,62 @@ window.AiService = {
     }
   },
 
-  // Perform Semantic AI Resume ATS Analysis (100% Resume-Driven)
+  // Perform Semantic AI Resume ATS Analysis (100% Resume-Driven, No JD)
   async analyzeResumeSemantics(resumeText, candidateProfileInput) {
     const appState = window.AppState ? window.AppState.getState() : {};
     const candidateProfile = candidateProfileInput || appState.candidateProfile || {};
+
+    // Cache key is tied to this specific resume text — a new upload bypasses any old cache
     const cacheKey = this.generateCacheHash(resumeText, candidateProfile.name || 'candidate');
 
-    try {
-      const cached = localStorage.getItem(cacheKey);
-      if (cached) return JSON.parse(cached);
-    } catch (e) {}
-
-    const targetRole = candidateProfile.detectedRole || 'Software Engineering Candidate';
-    
-    // Safely invoke local AtsEngine contract
-    let deterministicResult = null;
-    const engine = window.AtsEngine || globalThis.AtsEngine;
-    if (engine && typeof engine.analyzeResume === 'function') {
-      deterministicResult = engine.analyzeResume(resumeText, candidateProfile, targetRole);
-    } else if (engine && typeof engine.analyze === 'function') {
-      deterministicResult = engine.analyze(resumeText, candidateProfile, targetRole);
-    } else if (engine && typeof engine.analyzeMatch === 'function') {
-      deterministicResult = engine.analyzeMatch(resumeText, '', targetRole);
-    } else {
-      console.warn('[ATS] window.AtsEngine not found or missing analyzeResume method. Using inline fallback.');
-      deterministicResult = {
-        overallScore: 80,
-        score: 80,
-        matchScore: 80,
-        targetRole,
-        detectedRoles: [targetRole],
-        categoryScores: { resumeStructure: 85, technicalSkills: 80, projects: 75, experience: 70, education: 90, achievements: 80, impact: 70, roleReadiness: 80 },
-        categories: [
-          { name: 'Resume Structure', weight: '15%', score: 85, weightedScore: 13, explanation: 'Section organization and layout readability.' },
-          { name: 'Technical Skills', weight: '20%', score: 80, weightedScore: 16, explanation: 'Breadth of languages, frameworks, and developer tools.' },
-          { name: 'Projects', weight: '20%', score: 75, weightedScore: 15, explanation: 'Substantive project execution.' },
-          { name: 'Experience & Internships', weight: '15%', score: 70, weightedScore: 11, explanation: 'Work history and professional alignment.' },
-          { name: 'Education', weight: '10%', score: 90, weightedScore: 9, explanation: 'Degree relevance.' },
-          { name: 'Achievements & Impact', weight: '10%', score: 80, weightedScore: 8, explanation: 'Quantifiable achievements.' },
-          { name: 'Role Readiness', weight: '10%', score: 80, weightedScore: 8, explanation: 'Overall career readiness.' }
-        ],
-        matchedSkills: candidateProfile.skills || [],
-        missingSkills: ['Cloud Infrastructure (AWS/Docker)'],
-        strengths: ['Solid foundation in software development.'],
-        weaknesses: ['Add quantifiable percentage metrics to project descriptions.'],
-        missingElements: ['Automated deployment highlights.'],
-        recommendations: ['Incorporate quantifiable metrics.'],
-        summary: `Resume ATS Analysis completed for ${targetRole}.`,
-        aiEnhanced: false,
-        isFallback: true,
-        source: 'Deterministic Resume ATS Engine (API Offline)'
-      };
-    }
-
-    // 1. Attempt Node.js / Express Backend API call
+    // Attempt backend API call first (Gemini runs server-side)
     try {
       const apiResponse = await this.fetchFromApi('/ats/analyze', {
         resumeText,
         candidateProfile
       });
       if (apiResponse && apiResponse.success && apiResponse.data) {
-        try { localStorage.setItem(cacheKey, JSON.stringify(apiResponse.data)); } catch (e) {}
-        return apiResponse.data;
+        const data = apiResponse.data;
+        // Only cache and return if it's a real AI result
+        if (data.isFallback !== true) {
+          try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch (e) {}
+        }
+        return data;
       }
     } catch (apiErr) {
-      console.warn('Backend API ATS notice (using local ATS engine):', apiErr.message);
+      console.warn('[ATS] Backend API unavailable:', apiErr.message);
     }
 
-    try {
-      const fallbackResult = await this.executeAiRequestWithRetry(resumeText, '', targetRole, deterministicResult);
-      try { localStorage.setItem(cacheKey, JSON.stringify(fallbackResult)); } catch (e) {}
-      return fallbackResult;
-    } catch (err) {
-      console.warn('AI Service ATS notice (using deterministic fallback):', err.message);
-      return {
-        ...deterministicResult,
-        aiEnhanced: false,
-        isFallback: true,
-        source: 'Deterministic Resume ATS Engine (API Offline)'
-      };
-    }
+    // Explicit fallback: backend was unreachable (network error, server down)
+    // This is clearly labeled and NOT presented as a Gemini result
+    const detectedRole = candidateProfile.detectedRole || 'Software Development Candidate';
+    const fallbackResult = {
+      score: null,
+      overallScore: null,
+      targetRole: detectedRole,
+      categories: [],
+      matchedSkills: candidateProfile.skills || [],
+      partialMatches: [],
+      missingSkills: [],
+      strengths: [],
+      suggestions: ['Connect the backend server to receive AI-powered analysis.'],
+      evidence: [],
+      semanticSummary: '',
+      aiEnhanced: false,
+      isFallback: true,
+      fallbackReason: 'Backend server unreachable — AI analysis unavailable.',
+      source: 'AI Analysis Unavailable (Server Offline)'
+    };
+    return fallbackResult;
   },
 
   async executeAiRequestWithRetry(resumeText, jobDescription, targetRole, fallbackData, isRetry = false) {
+    // This is no longer called in the primary path — kept only for backward compat
     return {
       ...fallbackData,
       aiEnhanced: false,
       isFallback: true,
-      source: 'Deterministic Fallback Analysis (API Offline)',
-      semanticSummary: `Deterministic ATS matching completed for ${targetRole}. Connect GEMINI_API_KEY for live AI semantic evaluation.`
+      source: 'AI Analysis Unavailable (Server Offline)'
     };
   },
 

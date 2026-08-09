@@ -123,33 +123,62 @@ window.UIController = {
     const result = state.atsResult;
     if (!result) return;
 
-    // AI Resume ATS Score Number
+    // AI Resume ATS Score Number — show '--' when fallback has no real score
     const scoreElem = document.getElementById('ats-score-number');
-    if (scoreElem) scoreElem.textContent = result.score || result.overallScore || result.matchScore;
+    const rawScore = result.score ?? result.overallScore ?? result.matchScore;
+    if (scoreElem) {
+      if (result.isFallback && (rawScore === null || rawScore === undefined)) {
+        scoreElem.textContent = '--';
+      } else {
+        scoreElem.textContent = rawScore;
+      }
+    }
 
     // Primary Detected Role & Source Badge Label
     const roleElem = document.getElementById('ats-role-label');
-    const sourceText = result.source || (result.aiEnhanced ? 'Gemini 2.5 Flash AI' : 'Deterministic Resume ATS Engine (API Offline)');
-    const primaryRole = result.targetRole || (state.candidateProfile ? state.candidateProfile.detectedRole : 'Software Engineering Candidate');
+    const primaryRole = result.targetRole || state.detectedRole ||
+      (state.candidateProfile ? state.candidateProfile.detectedRole : null) ||
+      'Software Development Candidate';
+
+    const isAiResult = result.aiEnhanced === true && !result.isFallback;
+    const sourceText = isAiResult
+      ? 'Gemini AI Resume Analysis'
+      : (result.isFallback ? (result.fallbackReason || 'AI Analysis Unavailable') : (result.source || 'AI Resume Analysis'));
+
     if (roleElem) {
-      roleElem.innerHTML = `Primary Role: <strong>${primaryRole}</strong> &bull; <span class="skill-tag ${result.aiEnhanced ? 'matched' : ''}" style="font-size:0.75rem; vertical-align:middle; font-weight:600;"><i class="fa-solid ${result.aiEnhanced ? 'fa-wand-magic-sparkles' : 'fa-gear'}"></i> ${sourceText}</span>`;
+      if (result.isFallback && result.score === null) {
+        // Offline/error state — show warning instead of fake data
+        roleElem.innerHTML = `<span class="skill-tag" style="font-size:0.8rem; color:#991b1b; background:rgba(239,68,68,0.1); border-color:rgba(239,68,68,0.3);"><i class="fa-solid fa-triangle-exclamation"></i> ${sourceText}</span>`;
+      } else {
+        roleElem.innerHTML = `Detected Role: <strong>${primaryRole}</strong> &bull; <span class="skill-tag ${isAiResult ? 'matched' : ''}" style="font-size:0.75rem; vertical-align:middle; font-weight:600;"><i class="fa-solid ${isAiResult ? 'fa-wand-magic-sparkles' : 'fa-circle-info'}"></i> ${sourceText}</span>`;
+      }
     }
 
-    // Category Breakdown List (Render 4 Weighted Categories)
+    // Show retry button if AI was unavailable
+    const retryBtnArea = document.getElementById('ats-retry-area');
+    if (retryBtnArea) {
+      retryBtnArea.style.display = (result.isFallback && result.score === null) ? 'block' : 'none';
+    }
+
+    // Category Breakdown List
     const container = document.getElementById('category-breakdown-container');
-    if (container && result.categories) {
-      container.innerHTML = result.categories.map(item => `
-        <div class="category-bar-item">
-          <div class="category-header">
-            <span>${item.name} <small style="color:var(--color-text-muted)">(${item.weight})</small></span>
-            <span class="mono-metric">${item.score}%</span>
+    if (container) {
+      if (result.categories && result.categories.length > 0) {
+        container.innerHTML = result.categories.map(item => `
+          <div class="category-bar-item">
+            <div class="category-header">
+              <span>${item.name} <small style="color:var(--color-text-muted)">(${item.weight})</small></span>
+              <span class="mono-metric">${item.score}%</span>
+            </div>
+            <div class="category-progress-track">
+              <div class="category-progress-fill" style="width: ${item.score}%"></div>
+            </div>
+            <div style="font-size:0.78rem; color:var(--color-text-muted); margin-top:0.15rem;">${item.explanation}</div>
           </div>
-          <div class="category-progress-track">
-            <div class="category-progress-fill" style="width: ${item.score}%"></div>
-          </div>
-          <div style="font-size:0.78rem; color:var(--color-text-muted); margin-top:0.15rem;">${item.explanation}</div>
-        </div>
-      `).join('');
+        `).join('');
+      } else if (result.isFallback) {
+        container.innerHTML = `<div style="color:var(--color-text-muted); font-size:0.88rem; padding:1rem 0;">AI analysis unavailable. Please retry when backend is connected.</div>`;
+      }
     }
 
     // Matched Requirements Tags
@@ -161,7 +190,7 @@ window.UIController = {
           <span class="skill-tag matched"><i class="fa-solid fa-circle-check"></i> ${item}</span>
         `).join('');
       } else {
-        matchedContainer.innerHTML = `<span style="font-size:0.85rem; color:var(--color-text-muted);">No direct keyword matches found.</span>`;
+        matchedContainer.innerHTML = `<span style="font-size:0.85rem; color:var(--color-text-muted);">Skills detected after AI analysis completes.</span>`;
       }
     }
 
@@ -174,19 +203,23 @@ window.UIController = {
           <span class="skill-tag missing"><i class="fa-solid fa-circle-xmark"></i> ${item}</span>
         `).join('');
       } else {
-        missingContainer.innerHTML = `<span style="font-size:0.85rem; color:var(--color-text-muted);">No major missing requirements detected.</span>`;
+        missingContainer.innerHTML = `<span style="font-size:0.85rem; color:var(--color-text-muted);">No major gaps detected.</span>`;
       }
     }
 
     // Strengths & Suggestions Lists
     const strengthsContainer = document.getElementById('ats-strengths-list');
-    if (strengthsContainer && result.strengths) {
-      strengthsContainer.innerHTML = result.strengths.map(s => `<li>${s}</li>`).join('');
+    if (strengthsContainer) {
+      strengthsContainer.innerHTML = (result.strengths && result.strengths.length > 0)
+        ? result.strengths.map(s => `<li>${s}</li>`).join('')
+        : '<li>Strengths will appear after AI analysis completes.</li>';
     }
 
     const suggestionsContainer = document.getElementById('ats-suggestions-list');
-    if (suggestionsContainer && result.suggestions) {
-      suggestionsContainer.innerHTML = result.suggestions.map(s => `<li>${s}</li>`).join('');
+    if (suggestionsContainer) {
+      suggestionsContainer.innerHTML = (result.suggestions && result.suggestions.length > 0)
+        ? result.suggestions.map(s => `<li>${s}</li>`).join('')
+        : '<li>Suggestions will appear after AI analysis completes.</li>';
     }
   },
 
@@ -195,10 +228,14 @@ window.UIController = {
     const setupCard = document.getElementById('interview-setup-card');
     const roomCard = document.getElementById('interview-room-card');
 
-    // 1. Setup Card Rendering
+    // 1. Setup Card Rendering — use detectedRole from profile or ATS result
     const roleTitleElem = document.getElementById('setup-target-role-title');
     if (roleTitleElem) {
-      roleTitleElem.textContent = state.targetRole || 'Target Role';
+      const detectedRole = state.detectedRole ||
+        (state.candidateProfile ? state.candidateProfile.detectedRole : null) ||
+        (state.atsResult ? state.atsResult.targetRole : null) ||
+        'Your Detected Role';
+      roleTitleElem.textContent = detectedRole;
     }
 
     if (state.interviewStage === 'setup') {

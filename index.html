@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TECHNOISM 2026 — AI Resume Screening & Mock Interview Platform</title>
-  <meta name="description"
-    content="AI-Powered Resume Screening, ATS Matching & Intelligent Mock Interview Platform for Students and Freshers.">
+  <meta name="description" content="AI-Powered Resume Screening, ATS Matching & Intelligent Mock Interview Platform for Students and Freshers.">
 
   <!-- Google Fonts: Rubik, Noto Sans, Nunito Sans, Roboto Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Nunito+Sans:wght@400;600;700&family=Roboto+Mono:wght@500;600;700&family=Rubik:wght@500;600;700;800&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Nunito+Sans:wght@400;600;700&family=Roboto+Mono:wght@500;600;700&family=Rubik:wght@500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -33,7 +29,6 @@
   <link rel="stylesheet" href="./css/design-tokens.css">
   <link rel="stylesheet" href="./css/main.css">
 </head>
-
 <body>
 
   <!-- Top Sticky Navigation Bar -->
@@ -44,8 +39,7 @@
           <i class="fa-solid fa-brain-circuit"></i>
         </div>
         <div class="brand-text">
-          <span class="brand-title">TECHNOISM <small
-              style="font-size:0.75rem; color:var(--color-action-blue);">2026</small></span>
+          <span class="brand-title">TECHNOISM <small style="font-size:0.75rem; color:var(--color-action-blue);">2026</small></span>
           <span class="brand-subtitle">CareerTech AI Platform</span>
         </div>
       </div>
@@ -111,8 +105,7 @@
             Bridge Your Resume to <span>Job Readiness</span> with AI
           </h1>
           <p class="hero-subtitle">
-            Upload your resume (PDF/DOCX), extract clean readable text, run transparent ATS-style matching against job
-            descriptions, and receive actionable candidate feedback.
+            Upload your resume (PDF/DOCX), extract clean readable text, run transparent ATS-style matching against job descriptions, and receive actionable candidate feedback.
           </p>
           <div class="hero-cta-group">
             <button class="btn btn-primary btn-lg" id="btn-start-analysis">
@@ -123,24 +116,20 @@
 
         <div class="hero-visual card-shell">
           <div style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
-            <div
-              style="width:40px; height:40px; border-radius:50%; background:var(--color-action-blue); color:white; display:flex; align-items:center; justify-content:center;">
+            <div style="width:40px; height:40px; border-radius:50%; background:var(--color-action-blue); color:white; display:flex; align-items:center; justify-content:center;">
               <i class="fa-solid fa-chart-pie"></i>
             </div>
             <div>
               <h4 style="margin:0;">ATS Match Scorecard</h4>
-              <span class="mono-metric" style="font-size:0.8rem; color:var(--color-action-blue);">Configurable Category
-                Weights</span>
+              <span class="mono-metric" style="font-size:0.8rem; color:var(--color-action-blue);">Configurable Category Weights</span>
             </div>
           </div>
           <div class="score-badge-circle" style="width:130px; height:130px;">
             <span class="score-number" style="font-size:2.2rem;">82%</span>
             <span class="score-label">ATS MATCH</span>
           </div>
-          <p class="ui-text"
-            style="font-size:0.88rem; text-align:center; color:var(--color-text-muted); margin-top:1rem;">
-            Explainable prototype matching score based on Skills (45%), Tools (20%), Experience (20%), and Education
-            (15%).
+          <p class="ui-text" style="font-size:0.88rem; text-align:center; color:var(--color-text-muted); margin-top:1rem;">
+            Explainable prototype matching score based on Skills (45%), Tools (20%), Experience (20%), and Education (15%).
           </p>
         </div>
       </div>
@@ -170,8 +159,7 @@
       <div class="card-shell">
         <div class="card-shell-header">
           <h2><i class="fa-solid fa-cloud-arrow-up"></i> Upload Candidate Resume</h2>
-          <p class="ui-text" style="color:var(--color-text-muted)">Select a PDF or DOCX resume to extract text for ATS
-            compatibility analysis.</p>
+          <p class="ui-text" style="color:var(--color-text-muted)">Select a PDF or DOCX resume to extract text for ATS compatibility analysis.</p>
         </div>
 
         <div class="upload-zone" id="upload-drop-zone">
@@ -197,21 +185,17 @@
         </div>
 
         <!-- Extracted Text Inspection & Preview Drawer -->
-        <div class="text-preview-card" id="text-preview-card"
-          style="display:none; margin-top:1.5rem; background:rgba(41, 54, 129, 0.03); border:1px solid var(--border-color-strong); border-radius:var(--radius-md); padding:1.25rem;">
+        <div class="text-preview-card" id="text-preview-card" style="display:none; margin-top:1.5rem; background:rgba(41, 54, 129, 0.03); border:1px solid var(--border-color-strong); border-radius:var(--radius-md); padding:1.25rem;">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
             <h4 style="margin:0;"><i class="fa-solid fa-file-lines"></i> Inspect Extracted Resume Text</h4>
-            <div
-              style="display:flex; gap:1rem; font-family:var(--font-mono); font-size:0.8rem; color:var(--color-text-muted);">
+            <div style="display:flex; gap:1rem; font-family:var(--font-mono); font-size:0.8rem; color:var(--color-text-muted);">
               <span>Char Count: <strong id="preview-char-count">0</strong></span>
               <span>Word Count: <strong id="preview-word-count">0</strong></span>
             </div>
           </div>
-          <textarea class="form-control" id="extracted-text-preview" rows="6"
-            style="font-family:var(--font-mono); font-size:0.85rem; line-height:1.4;"></textarea>
+          <textarea class="form-control" id="extracted-text-preview" rows="6" style="font-family:var(--font-mono); font-size:0.85rem; line-height:1.4;"></textarea>
           <p style="font-size:0.8rem; color:var(--color-text-muted); margin-top:0.5rem; margin-bottom:0;">
-            <i class="fa-solid fa-circle-info"></i> You can inspect or clean up extracted text above before proceeding
-            to ATS matching.
+            <i class="fa-solid fa-circle-info"></i> You can inspect or clean up extracted text above before proceeding to ATS matching.
           </p>
         </div>
 
@@ -231,10 +215,8 @@
           </button>
           <div id="manual-text-area" style="display:none; margin-top:1rem; text-align:left;">
             <label class="form-label">Paste Resume Text</label>
-            <textarea class="form-control" id="manual-resume-textarea"
-              placeholder="Paste extracted or copied resume text here..."></textarea>
-            <button class="btn btn-secondary btn-sm" id="btn-save-manual-text" type="button"
-              style="margin-top:0.75rem;">
+            <textarea class="form-control" id="manual-resume-textarea" placeholder="Paste extracted or copied resume text here..."></textarea>
+            <button class="btn btn-secondary btn-sm" id="btn-save-manual-text" type="button" style="margin-top:0.75rem;">
               Use Pasted Text
             </button>
           </div>
@@ -249,24 +231,31 @@
       <div class="card-shell">
         <div class="card-shell-header" style="display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <h2><i class="fa-solid fa-chart-pie"></i> ATS-Style Match Scorecard</h2>
-            <p class="ui-text" style="color:var(--color-text-muted)" id="ats-role-label">Target Role</p>
+            <h2><i class="fa-solid fa-chart-pie"></i> AI Resume Readiness Scorecard</h2>
+            <p class="ui-text" style="color:var(--color-text-muted)" id="ats-role-label">Detected Role</p>
           </div>
           <button class="btn btn-primary" id="btn-start-interview-setup">
             Practice AI Interview <i class="fa-solid fa-comments"></i>
           </button>
         </div>
 
+        <!-- AI Offline Retry Area (shown only when backend is unreachable) -->
+        <div id="ats-retry-area" style="display:none; background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.25); padding:0.9rem 1.25rem; border-radius:var(--radius-sm); margin-bottom:1.5rem;">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#991b1b; font-size:1.1rem;"></i>
+            <div style="font-size:0.85rem; color:#991b1b; line-height:1.4; flex:1;">
+              <strong>AI Analysis Unavailable.</strong> The backend server could not be reached. Start the server and retry.
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-ats-retry"><i class="fa-solid fa-rotate-right"></i> Retry Analysis</button>
+          </div>
+        </div>
+
         <!-- Disclaimer Banner -->
-        <div
-          style="background:rgba(66, 116, 217, 0.08); border-left:4px solid var(--color-action-blue); padding:0.9rem 1.25rem; border-radius:var(--radius-sm); margin-bottom:1.5rem;">
+        <div style="background:rgba(66, 116, 217, 0.08); border-left:4px solid var(--color-action-blue); padding:0.9rem 1.25rem; border-radius:var(--radius-sm); margin-bottom:1.5rem;">
           <div style="display:flex; align-items:flex-start; gap:0.75rem;">
-            <i class="fa-solid fa-circle-info"
-              style="color:var(--color-action-blue); font-size:1.1rem; margin-top:0.15rem;"></i>
+            <i class="fa-solid fa-circle-info" style="color:var(--color-action-blue); font-size:1.1rem; margin-top:0.15rem;"></i>
             <div style="font-size:0.85rem; color:var(--color-deep-blue); line-height:1.4;">
-              <strong>Explainable Prototype Analysis:</strong> This is an explainable ATS-style match score based on
-              transparent category weighting. It is designed for career preparation and candidate learning and does not
-              guarantee employer ATS approval or job shortlisting.
+              <strong>AI Resume Analysis:</strong> This score is generated from your uploaded resume using structured AI analysis of your skills, experience, projects, education, and resume quality. It is intended for career preparation and learning.
             </div>
           </div>
         </div>
@@ -277,8 +266,7 @@
               <span class="score-number" id="ats-score-number">--</span>
               <span class="score-label">ATS SCORE</span>
             </div>
-            <div
-              style="font-family:var(--font-mono); font-size:0.75rem; color:var(--color-text-muted); margin-top:0.5rem;">
+            <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--color-text-muted); margin-top:0.5rem;">
               AI Resume ATS Score
             </div>
           </div>
@@ -292,17 +280,13 @@
 
         <!-- Matched & Missing Skills Grid -->
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-top:2rem;">
-          <div
-            style="background:rgba(16, 185, 129, 0.05); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(16, 185, 129, 0.2);">
-            <h4 style="color:#065f46; margin-bottom:0.75rem;"><i class="fa-solid fa-circle-check"></i> Matched
-              Requirements</h4>
+          <div style="background:rgba(16, 185, 129, 0.05); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(16, 185, 129, 0.2);">
+            <h4 style="color:#065f46; margin-bottom:0.75rem;"><i class="fa-solid fa-circle-check"></i> Matched Requirements</h4>
             <div class="skills-tags-container" id="matched-skills-container"></div>
           </div>
 
-          <div
-            style="background:rgba(239, 68, 68, 0.05); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(239, 68, 68, 0.2);">
-            <h4 style="color:#991b1b; margin-bottom:0.75rem;"><i class="fa-solid fa-circle-xmark"></i> Missing
-              Requirements</h4>
+          <div style="background:rgba(239, 68, 68, 0.05); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(239, 68, 68, 0.2);">
+            <h4 style="color:#991b1b; margin-bottom:0.75rem;"><i class="fa-solid fa-circle-xmark"></i> Missing Requirements</h4>
             <div class="skills-tags-container" id="missing-skills-container"></div>
           </div>
         </div>
@@ -314,8 +298,7 @@
             <ul style="padding-left:1.25rem; margin-top:0.5rem;" id="ats-strengths-list"></ul>
           </div>
           <div>
-            <h4><i class="fa-solid fa-lightbulb" style="color:var(--color-warning)"></i> Actionable Resume Suggestions
-            </h4>
+            <h4><i class="fa-solid fa-lightbulb" style="color:var(--color-warning)"></i> Actionable Resume Suggestions</h4>
             <ul style="padding-left:1.25rem; margin-top:0.5rem;" id="ats-suggestions-list"></ul>
           </div>
         </div>
@@ -329,48 +312,35 @@
       <div class="card-shell" id="interview-setup-card">
         <div class="card-shell-header">
           <h2><i class="fa-solid fa-headset" style="color:var(--color-action-blue);"></i> AI Mock Interview Setup</h2>
-          <p class="ui-text" style="color:var(--color-text-muted)">Practice a fast, tailored role-specific interview
-            based on your target role, job description, and resume context.</p>
+          <p class="ui-text" style="color:var(--color-text-muted)">Practice a personalized interview tailored to your resume, detected role, and skills. AI evaluates your answers for relevance, clarity, and technical understanding.</p>
         </div>
 
-        <div
-          style="background:rgba(41, 54, 129, 0.04); border:1px solid var(--border-color-subtle); padding:1.5rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
+        <div style="background:rgba(41, 54, 129, 0.04); border:1px solid var(--border-color-subtle); padding:1.5rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
             <div>
-              <span class="mono-metric"
-                style="font-size:0.75rem; color:var(--color-action-blue); text-transform:uppercase; letter-spacing:0.5px;">Target
-                Role</span>
-              <h3 style="margin:0.2rem 0 0 0; color:var(--color-deep-blue);" id="setup-target-role-title">Target Role
-              </h3>
+              <span class="mono-metric" style="font-size:0.75rem; color:var(--color-action-blue); text-transform:uppercase; letter-spacing:0.5px;">Detected Role</span>
+              <h3 style="margin:0.2rem 0 0 0; color:var(--color-deep-blue);" id="setup-target-role-title">Your Detected Role</h3>
             </div>
             <div style="text-align:right;">
-              <span class="skill-tag matched"><i class="fa-solid fa-wand-magic-sparkles"></i> Context Aware</span>
+              <span class="skill-tag matched"><i class="fa-solid fa-wand-magic-sparkles"></i> Resume-Driven</span>
             </div>
           </div>
-          <p
-            style="font-size:0.88rem; color:var(--color-text-muted); margin-top:0.75rem; margin-bottom:0; line-height:1.5;">
-            Questions are generated specifically for your target role using your job description and resume context. AI
-            will assess your answers for <strong>relevance</strong>, <strong>clarity</strong>, and
-            <strong>structure</strong>.
+          <p style="font-size:0.88rem; color:var(--color-text-muted); margin-top:0.75rem; margin-bottom:0; line-height:1.5;">
+            Questions are generated from your actual resume — your skills, projects, and experience. AI will assess your answers for <strong>relevance</strong>, <strong>clarity</strong>, and <strong>technical accuracy</strong>.
           </p>
         </div>
 
         <div class="form-group" style="margin-bottom:2rem;">
           <label class="form-label"><i class="fa-solid fa-list-ol"></i> Select Session Length</label>
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
-            <label
-              style="border:2px solid var(--border-color-strong); border-radius:var(--radius-md); padding:1rem; cursor:pointer; display:flex; align-items:center; gap:0.75rem;"
-              class="session-length-option active" id="opt-q3">
-              <input type="radio" name="question_count_choice" value="3" checked
-                style="accent-color:var(--color-action-blue)">
+            <label style="border:2px solid var(--border-color-strong); border-radius:var(--radius-md); padding:1rem; cursor:pointer; display:flex; align-items:center; gap:0.75rem;" class="session-length-option active" id="opt-q3">
+              <input type="radio" name="question_count_choice" value="3" checked style="accent-color:var(--color-action-blue)">
               <div>
                 <strong>3 Questions (Fast Demo)</strong>
                 <div style="font-size:0.8rem; color:var(--color-text-muted);">Est. 3-5 minutes • Recommended</div>
               </div>
             </label>
-            <label
-              style="border:2px solid var(--border-color-strong); border-radius:var(--radius-md); padding:1rem; cursor:pointer; display:flex; align-items:center; gap:0.75rem;"
-              class="session-length-option" id="opt-q5">
+            <label style="border:2px solid var(--border-color-strong); border-radius:var(--radius-md); padding:1rem; cursor:pointer; display:flex; align-items:center; gap:0.75rem;" class="session-length-option" id="opt-q5">
               <input type="radio" name="question_count_choice" value="5" style="accent-color:var(--color-action-blue)">
               <div>
                 <strong>5 Questions (Deep Dive)</strong>
@@ -409,22 +379,17 @@
 
         <!-- Question Card Display -->
         <div class="question-card" style="position:relative;">
-          <div
-            style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.75rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; margin-bottom:0.75rem;">
             <span class="question-number-badge" id="question-index-label">QUESTION 1</span>
             <div style="display:flex; gap:0.5rem;">
-              <span class="skill-tag" id="question-difficulty-tag"
-                style="background:var(--color-pale-aqua); color:var(--color-deep-blue); font-size:0.75rem;">Medium</span>
-              <span class="skill-tag" id="question-focus-tag"
-                style="background:rgba(66, 116, 217, 0.1); color:var(--color-action-blue); font-size:0.75rem;">Technical
-                Knowledge</span>
-              <button class="btn btn-secondary btn-sm" id="btn-read-aloud" type="button"
-                title="Read Question Aloud (SpeechSynthesis)" style="padding:0.25rem 0.6rem; font-size:0.8rem;">
+              <span class="skill-tag" id="question-difficulty-tag" style="background:var(--color-pale-aqua); color:var(--color-deep-blue); font-size:0.75rem;">Medium</span>
+              <span class="skill-tag" id="question-focus-tag" style="background:rgba(66, 116, 217, 0.1); color:var(--color-action-blue); font-size:0.75rem;">Technical Knowledge</span>
+              <button class="btn btn-secondary btn-sm" id="btn-read-aloud" type="button" title="Read Question Aloud (SpeechSynthesis)" style="padding:0.25rem 0.6rem; font-size:0.8rem;">
                 <i class="fa-solid fa-volume-high"></i> Listen
               </button>
             </div>
           </div>
-
+          
           <div class="question-text" id="question-text-display">
             Loading interview question...
           </div>
@@ -435,89 +400,66 @@
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
             <label class="form-label" for="interview-answer-textarea">Your Answer *</label>
             <div class="audio-controls-row" style="display:flex; align-items:center; gap:0.75rem;">
-              <span style="font-size:0.8rem; color:var(--color-text-muted);" id="mic-status-label">Voice
-                Dictation</span>
-              <button class="mic-toggle-btn" id="btn-mic-toggle" type="button"
-                title="Click to speak answer (Web Speech API)">
+              <span style="font-size:0.8rem; color:var(--color-text-muted);" id="mic-status-label">Voice Dictation</span>
+              <button class="mic-toggle-btn" id="btn-mic-toggle" type="button" title="Click to speak answer (Web Speech API)">
                 <i class="fa-solid fa-microphone"></i>
               </button>
             </div>
           </div>
-          <textarea class="form-control" id="interview-answer-textarea" rows="5"
-            placeholder="Type or speak your answer clearly here using your own words..."></textarea>
-          <div
-            style="display:flex; justify-content:space-between; margin-top:0.35rem; font-size:0.78rem; color:var(--color-text-muted);">
+          <textarea class="form-control" id="interview-answer-textarea" rows="5" placeholder="Type or speak your answer clearly here using your own words..."></textarea>
+          <div style="display:flex; justify-content:space-between; margin-top:0.35rem; font-size:0.78rem; color:var(--color-text-muted);">
             <span>Tip: Mention relevant project details, tools, or STAR steps.</span>
             <span id="answer-word-count">0 words</span>
           </div>
         </div>
 
         <!-- Per-Question Answer Evaluation Feedback Drawer -->
-        <div class="answer-evaluation-card" id="answer-evaluation-card"
-          style="display:none; background:rgba(41, 54, 129, 0.03); border:1px solid var(--border-color-strong); border-radius:var(--radius-md); padding:1.25rem; margin-top:1.5rem;">
-          <div
-            style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color-subtle); padding-bottom:0.75rem; margin-bottom:1rem;">
-            <h4 style="margin:0; color:var(--color-deep-blue);"><i class="fa-solid fa-square-poll-vertical"
-                style="color:var(--color-action-blue);"></i> Instant Answer Evaluation</h4>
+        <div class="answer-evaluation-card" id="answer-evaluation-card" style="display:none; background:rgba(41, 54, 129, 0.03); border:1px solid var(--border-color-strong); border-radius:var(--radius-md); padding:1.25rem; margin-top:1.5rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color-subtle); padding-bottom:0.75rem; margin-bottom:1rem;">
+            <h4 style="margin:0; color:var(--color-deep-blue);"><i class="fa-solid fa-square-poll-vertical" style="color:var(--color-action-blue);"></i> Instant Answer Evaluation</h4>
             <div style="display:flex; gap:0.75rem; align-items:center;">
-              <span class="score-badge-circle" style="width:48px; height:48px; font-size:1.1rem;"
-                id="eval-score-badge">85</span>
-              <span style="font-weight:600; font-size:0.88rem; color:var(--color-deep-blue);"
-                id="eval-score-label">Answer Score</span>
+              <span class="score-badge-circle" style="width:48px; height:48px; font-size:1.1rem;" id="eval-score-badge">85</span>
+              <span style="font-weight:600; font-size:0.88rem; color:var(--color-deep-blue);" id="eval-score-label">Answer Score</span>
             </div>
           </div>
 
           <!-- Metric Badges -->
-          <div
-            style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; text-align:center; margin-bottom:1rem;">
-            <div
-              style="background:white; padding:0.6rem; border-radius:var(--radius-sm); border:1px solid var(--border-color-subtle);">
-              <div style="font-size:1.1rem; font-weight:700; color:var(--color-action-blue);"
-                id="eval-relevance-metric">--</div>
+          <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1rem; text-align:center; margin-bottom:1rem;">
+            <div style="background:white; padding:0.6rem; border-radius:var(--radius-sm); border:1px solid var(--border-color-subtle);">
+              <div style="font-size:1.1rem; font-weight:700; color:var(--color-action-blue);" id="eval-relevance-metric">--</div>
               <div style="font-size:0.75rem; color:var(--color-text-muted);">Relevance</div>
             </div>
-            <div
-              style="background:white; padding:0.6rem; border-radius:var(--radius-sm); border:1px solid var(--border-color-subtle);">
-              <div style="font-size:1.1rem; font-weight:700; color:var(--color-success);" id="eval-clarity-metric">--
-              </div>
+            <div style="background:white; padding:0.6rem; border-radius:var(--radius-sm); border:1px solid var(--border-color-subtle);">
+              <div style="font-size:1.1rem; font-weight:700; color:var(--color-success);" id="eval-clarity-metric">--</div>
               <div style="font-size:0.75rem; color:var(--color-text-muted);">Clarity</div>
             </div>
-            <div
-              style="background:white; padding:0.6rem; border-radius:var(--radius-sm); border:1px solid var(--border-color-subtle);">
-              <div style="font-size:1.1rem; font-weight:700; color:var(--color-warning);" id="eval-structure-metric">--
-              </div>
+            <div style="background:white; padding:0.6rem; border-radius:var(--radius-sm); border:1px solid var(--border-color-subtle);">
+              <div style="font-size:1.1rem; font-weight:700; color:var(--color-warning);" id="eval-structure-metric">--</div>
               <div style="font-size:0.75rem; color:var(--color-text-muted);">Structure</div>
             </div>
           </div>
 
           <!-- What Candidate Said -->
-          <div
-            style="margin-bottom:0.75rem; font-size:0.85rem; background:white; padding:0.75rem; border-radius:var(--radius-sm); border-left:3px solid var(--color-action-blue);">
-            <strong style="color:var(--color-deep-blue);"><i class="fa-solid fa-quote-left"></i> What You
-              Submitted:</strong>
-            <div id="eval-candidate-said-text"
-              style="color:var(--color-text-muted); margin-top:0.25rem; font-style:italic;">--</div>
+          <div style="margin-bottom:0.75rem; font-size:0.85rem; background:white; padding:0.75rem; border-radius:var(--radius-sm); border-left:3px solid var(--color-action-blue);">
+            <strong style="color:var(--color-deep-blue);"><i class="fa-solid fa-quote-left"></i> What You Submitted:</strong>
+            <div id="eval-candidate-said-text" style="color:var(--color-text-muted); margin-top:0.25rem; font-style:italic;">--</div>
           </div>
 
           <!-- Strengths vs Improvements -->
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-top:0.75rem;">
             <div>
-              <h5 style="color:#065f46; margin:0 0 0.4rem 0;"><i class="fa-solid fa-circle-check"></i> Answer Strengths
-              </h5>
+              <h5 style="color:#065f46; margin:0 0 0.4rem 0;"><i class="fa-solid fa-circle-check"></i> Answer Strengths</h5>
               <ul style="padding-left:1.1rem; margin:0; font-size:0.83rem;" id="eval-strengths-list"></ul>
             </div>
             <div>
-              <h5 style="color:#991b1b; margin:0 0 0.4rem 0;"><i class="fa-solid fa-lightbulb"></i> What Could Be
-                Improved</h5>
+              <h5 style="color:#991b1b; margin:0 0 0.4rem 0;"><i class="fa-solid fa-lightbulb"></i> What Could Be Improved</h5>
               <ul style="padding-left:1.1rem; margin:0; font-size:0.83rem;" id="eval-improvements-list"></ul>
             </div>
           </div>
 
           <!-- Actionable Tip -->
-          <div
-            style="margin-top:1rem; background:rgba(66, 116, 217, 0.08); padding:0.75rem; border-radius:var(--radius-sm); font-size:0.83rem;">
-            <strong><i class="fa-solid fa-comment-dots" style="color:var(--color-action-blue);"></i> Next Action
-              Tip:</strong>
+          <div style="margin-top:1rem; background:rgba(66, 116, 217, 0.08); padding:0.75rem; border-radius:var(--radius-sm); font-size:0.83rem;">
+            <strong><i class="fa-solid fa-comment-dots" style="color:var(--color-action-blue);"></i> Next Action Tip:</strong>
             <span id="eval-next-tip-text">--</span>
           </div>
         </div>
@@ -540,83 +482,63 @@
       <div class="card-shell">
         <div class="card-shell-header">
           <h2><i class="fa-solid fa-award" style="color:var(--color-action-blue)"></i> Final Candidate Scorecard</h2>
-          <p class="ui-text" style="color:var(--color-text-muted)" id="report-target-role-label">Consolidated ATS
-            screening and AI mock interview readiness assessment.</p>
+          <p class="ui-text" style="color:var(--color-text-muted)" id="report-target-role-label">Consolidated ATS screening and AI mock interview readiness assessment.</p>
         </div>
 
         <!-- Three-Stage Score Overview Grid -->
-        <div
-          style="display:grid; grid-template-columns: repeat(4, 1fr); gap:1.25rem; text-align:center; margin-bottom:2rem;">
-          <div
-            style="background:var(--color-pale-aqua); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(41,54,129,0.1);">
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:1.25rem; text-align:center; margin-bottom:2rem;">
+          <div style="background:var(--color-pale-aqua); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(41,54,129,0.1);">
             <div class="score-number" id="final-ats-score" style="font-size:2.2rem;">--</div>
             <div class="score-label">ATS RESUME FIT (30%)</div>
           </div>
-          <div
-            style="background:rgba(66, 116, 217, 0.1); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(66,116,217,0.2);">
-            <div class="score-number" id="final-interview-score"
-              style="font-size:2.2rem; color:var(--color-action-blue);">--</div>
+          <div style="background:rgba(66, 116, 217, 0.1); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(66,116,217,0.2);">
+            <div class="score-number" id="final-interview-score" style="font-size:2.2rem; color:var(--color-action-blue);">--</div>
             <div class="score-label">GENERAL INTERVIEW (35%)</div>
           </div>
-          <div
-            style="background:rgba(16, 185, 129, 0.1); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(16,185,129,0.2);">
-            <div class="score-number" id="final-coding-score" style="font-size:2.2rem; color:var(--color-success);">--
-            </div>
+          <div style="background:rgba(16, 185, 129, 0.1); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(16,185,129,0.2);">
+            <div class="score-number" id="final-coding-score" style="font-size:2.2rem; color:var(--color-success);">--</div>
             <div class="score-label">COMPANY CODING (35%)</div>
           </div>
-          <div
-            style="background:linear-gradient(135deg, var(--color-deep-blue), var(--color-action-blue)); color:white; padding:1.25rem; border-radius:var(--radius-md); box-shadow:var(--shadow-md);">
+          <div style="background:linear-gradient(135deg, var(--color-deep-blue), var(--color-action-blue)); color:white; padding:1.25rem; border-radius:var(--radius-md); box-shadow:var(--shadow-md);">
             <div class="score-number" id="final-readiness-score" style="font-size:2.2rem; color:white;">--</div>
-            <div class="score-label" style="color:rgba(255,255,255,0.85);" id="final-readiness-level">OVERALL
-              PREPARATION</div>
+            <div class="score-label" style="color:rgba(255,255,255,0.85);" id="final-readiness-level">OVERALL PREPARATION</div>
           </div>
         </div>
 
         <!-- Interview Quality Sub-Metrics -->
-        <div
-          style="background:rgba(41, 54, 129, 0.03); border:1px solid var(--border-color-subtle); padding:1.25rem; border-radius:var(--radius-md); margin-bottom:2rem;">
-          <h4 style="margin:0 0 1rem 0; color:var(--color-deep-blue);"><i class="fa-solid fa-chart-simple"
-              style="color:var(--color-action-blue);"></i> Interview Quality Sub-Metrics</h4>
+        <div style="background:rgba(41, 54, 129, 0.03); border:1px solid var(--border-color-subtle); padding:1.25rem; border-radius:var(--radius-md); margin-bottom:2rem;">
+          <h4 style="margin:0 0 1rem 0; color:var(--color-deep-blue);"><i class="fa-solid fa-chart-simple" style="color:var(--color-action-blue);"></i> Interview Quality Sub-Metrics</h4>
           <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1.25rem; text-align:center;">
             <div>
               <div style="font-size:0.8rem; color:var(--color-text-muted);">Relevance Score</div>
-              <div style="font-size:1.5rem; font-weight:700; color:var(--color-action-blue);"
-                id="report-relevance-score">--</div>
+              <div style="font-size:1.5rem; font-weight:700; color:var(--color-action-blue);" id="report-relevance-score">--</div>
             </div>
             <div>
               <div style="font-size:0.8rem; color:var(--color-text-muted);">Clarity Score</div>
-              <div style="font-size:1.5rem; font-weight:700; color:var(--color-success);" id="report-clarity-score">--
-              </div>
+              <div style="font-size:1.5rem; font-weight:700; color:var(--color-success);" id="report-clarity-score">--</div>
             </div>
             <div>
               <div style="font-size:0.8rem; color:var(--color-text-muted);">Structure (STAR) Score</div>
-              <div style="font-size:1.5rem; font-weight:700; color:var(--color-warning);" id="report-structure-score">--
-              </div>
+              <div style="font-size:1.5rem; font-weight:700; color:var(--color-warning);" id="report-structure-score">--</div>
             </div>
           </div>
         </div>
 
         <!-- Combined Strengths & Gaps -->
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
-          <div
-            style="background:rgba(16, 185, 129, 0.04); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(16, 185, 129, 0.2);">
-            <h4 style="color:#065f46; margin-bottom:0.75rem;"><i class="fa-solid fa-circle-check"></i> Key Strengths &
-              Accomplishments</h4>
+          <div style="background:rgba(16, 185, 129, 0.04); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(16, 185, 129, 0.2);">
+            <h4 style="color:#065f46; margin-bottom:0.75rem;"><i class="fa-solid fa-circle-check"></i> Key Strengths & Accomplishments</h4>
             <ul style="padding-left:1.25rem; margin:0;" id="final-strengths-list"></ul>
           </div>
-          <div
-            style="background:rgba(239, 68, 68, 0.04); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(239, 68, 68, 0.2);">
-            <h4 style="color:#991b1b; margin-bottom:0.75rem;"><i class="fa-solid fa-triangle-exclamation"></i>
-              Identified Gaps & Development Areas</h4>
+          <div style="background:rgba(239, 68, 68, 0.04); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(239, 68, 68, 0.2);">
+            <h4 style="color:#991b1b; margin-bottom:0.75rem;"><i class="fa-solid fa-triangle-exclamation"></i> Identified Gaps & Development Areas</h4>
             <ul style="padding-left:1.25rem; margin:0;" id="final-gaps-list"></ul>
           </div>
         </div>
 
         <!-- Concrete Recommendations -->
-        <div
-          style="margin-top:2rem; background:rgba(66, 116, 217, 0.06); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(66, 116, 217, 0.2);">
-          <h4 style="color:var(--color-deep-blue); margin-bottom:0.75rem;"><i class="fa-solid fa-list-check"
-              style="color:var(--color-action-blue)"></i> Concrete Next Actions</h4>
+        <div style="margin-top:2rem; background:rgba(66, 116, 217, 0.06); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(66, 116, 217, 0.2);">
+          <h4 style="color:var(--color-deep-blue); margin-bottom:0.75rem;"><i class="fa-solid fa-list-check" style="color:var(--color-action-blue)"></i> Concrete Next Actions</h4>
           <ul style="padding-left:1.25rem; margin:0;" id="final-actions-list"></ul>
         </div>
 
@@ -635,8 +557,7 @@
   </main>
 
   <!-- Global Fullscreen Loading Overlay -->
-  <div class="loading-overlay" id="global-loading-overlay"
-    style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.92); z-index:999; backdrop-filter:blur(4px);">
+  <div class="loading-overlay" id="global-loading-overlay" style="display:none; position:fixed; inset:0; background:rgba(255,255,255,0.92); z-index:999; backdrop-filter:blur(4px);">
     <div class="spinner"></div>
     <h3 id="loading-message" style="color:var(--color-deep-blue)">Processing...</h3>
     <p class="ui-text" style="color:var(--color-text-muted)">Please wait while TECHNOISM AI completes your request.</p>
@@ -644,10 +565,9 @@
 
   <!-- Footer -->
   <footer class="app-footer">
-    <div
-      style="max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+    <div style="max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
       <div>
-        <strong>TECHNOISM HACKATHON 2026</strong> • Team 001 Tech Titans
+        <strong>TECHNOISM HACKATHON 2026</strong> • Team 001 Tech Innovators
       </div>
       <div>
         C. K. Pithawala College of Engineering & Technology, Surat
@@ -667,5 +587,4 @@
   <script src="./js/ui.js"></script>
   <script src="./js/app.js"></script>
 </body>
-
 </html>

@@ -231,12 +231,23 @@
       <div class="card-shell">
         <div class="card-shell-header" style="display:flex; justify-content:space-between; align-items:center;">
           <div>
-            <h2><i class="fa-solid fa-chart-pie"></i> ATS-Style Match Scorecard</h2>
-            <p class="ui-text" style="color:var(--color-text-muted)" id="ats-role-label">Target Role</p>
+            <h2><i class="fa-solid fa-chart-pie"></i> AI Resume Readiness Scorecard</h2>
+            <p class="ui-text" style="color:var(--color-text-muted)" id="ats-role-label">Detected Role</p>
           </div>
           <button class="btn btn-primary" id="btn-start-interview-setup">
             Practice AI Interview <i class="fa-solid fa-comments"></i>
           </button>
+        </div>
+
+        <!-- AI Offline Retry Area (shown only when backend is unreachable) -->
+        <div id="ats-retry-area" style="display:none; background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.25); padding:0.9rem 1.25rem; border-radius:var(--radius-sm); margin-bottom:1.5rem;">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#991b1b; font-size:1.1rem;"></i>
+            <div style="font-size:0.85rem; color:#991b1b; line-height:1.4; flex:1;">
+              <strong>AI Analysis Unavailable.</strong> The backend server could not be reached. Start the server and retry.
+            </div>
+            <button class="btn btn-secondary btn-sm" id="btn-ats-retry"><i class="fa-solid fa-rotate-right"></i> Retry Analysis</button>
+          </div>
         </div>
 
         <!-- Disclaimer Banner -->
@@ -244,7 +255,7 @@
           <div style="display:flex; align-items:flex-start; gap:0.75rem;">
             <i class="fa-solid fa-circle-info" style="color:var(--color-action-blue); font-size:1.1rem; margin-top:0.15rem;"></i>
             <div style="font-size:0.85rem; color:var(--color-deep-blue); line-height:1.4;">
-              <strong>Explainable Prototype Analysis:</strong> This is an explainable ATS-style match score based on transparent category weighting. It is designed for career preparation and candidate learning and does not guarantee employer ATS approval or job shortlisting.
+              <strong>AI Resume Analysis:</strong> This score is generated from your uploaded resume using structured AI analysis of your skills, experience, projects, education, and resume quality. It is intended for career preparation and learning.
             </div>
           </div>
         </div>
@@ -301,21 +312,21 @@
       <div class="card-shell" id="interview-setup-card">
         <div class="card-shell-header">
           <h2><i class="fa-solid fa-headset" style="color:var(--color-action-blue);"></i> AI Mock Interview Setup</h2>
-          <p class="ui-text" style="color:var(--color-text-muted)">Practice a fast, tailored role-specific interview based on your target role, job description, and resume context.</p>
+          <p class="ui-text" style="color:var(--color-text-muted)">Practice a personalized interview tailored to your resume, detected role, and skills. AI evaluates your answers for relevance, clarity, and technical understanding.</p>
         </div>
 
         <div style="background:rgba(41, 54, 129, 0.04); border:1px solid var(--border-color-subtle); padding:1.5rem; border-radius:var(--radius-md); margin-bottom:1.5rem;">
           <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
             <div>
-              <span class="mono-metric" style="font-size:0.75rem; color:var(--color-action-blue); text-transform:uppercase; letter-spacing:0.5px;">Target Role</span>
-              <h3 style="margin:0.2rem 0 0 0; color:var(--color-deep-blue);" id="setup-target-role-title">Target Role</h3>
+              <span class="mono-metric" style="font-size:0.75rem; color:var(--color-action-blue); text-transform:uppercase; letter-spacing:0.5px;">Detected Role</span>
+              <h3 style="margin:0.2rem 0 0 0; color:var(--color-deep-blue);" id="setup-target-role-title">Your Detected Role</h3>
             </div>
             <div style="text-align:right;">
-              <span class="skill-tag matched"><i class="fa-solid fa-wand-magic-sparkles"></i> Context Aware</span>
+              <span class="skill-tag matched"><i class="fa-solid fa-wand-magic-sparkles"></i> Resume-Driven</span>
             </div>
           </div>
           <p style="font-size:0.88rem; color:var(--color-text-muted); margin-top:0.75rem; margin-bottom:0; line-height:1.5;">
-            Questions are generated specifically for your target role using your job description and resume context. AI will assess your answers for <strong>relevance</strong>, <strong>clarity</strong>, and <strong>structure</strong>.
+            Questions are generated from your actual resume — your skills, projects, and experience. AI will assess your answers for <strong>relevance</strong>, <strong>clarity</strong>, and <strong>technical accuracy</strong>.
           </p>
         </div>
 
