@@ -105,6 +105,32 @@ function parseProfileFromTextNode(text, filename = 'resume.pdf') {
     }
   }
 
+  let detectedRole = 'Software Development Engineer';
+  if (lower.includes('data engineer') || lower.includes('pyspark') || lower.includes('etl')) {
+    detectedRole = 'Data & Backend Engineer';
+  } else if (lower.includes('react') || lower.includes('frontend') || lower.includes('html5')) {
+    detectedRole = 'Associate Frontend Developer';
+  } else if (lower.includes('full-stack') || lower.includes('node.js')) {
+    detectedRole = 'Full-Stack Software Engineer';
+  }
+
+  const recommendedJobDescription = `Role: ${detectedRole}
+Company: Target Engineering Team
+Location: Hybrid / Remote
+
+Job Overview:
+We are seeking a enthusiastic ${detectedRole} to join our core product engineering team. You will be responsible for creating modern, high-performance software applications and API integrations.
+
+Key Responsibilities:
+- Develop clean, maintainable code using ${programmingLanguages.slice(0, 4).join(', ') || 'JavaScript'}.
+- Collaborate with engineering teams using ${frameworks.slice(0, 3).join(', ') || 'React, Node.js'}.
+- Query and manage databases including ${databases.slice(0, 2).join(', ') || 'PostgreSQL'}.
+- Maintain version control using ${tools.slice(0, 2).join(', ') || 'Git, GitHub'}.
+
+Requirements & Qualifications:
+- Solid technical foundation and hands-on experience in ${skills.slice(0, 5).join(', ') || 'Software Engineering'}.
+- Strong problem-solving mindset and eagerness to learn.`;
+
   return {
     name,
     email,
@@ -119,7 +145,9 @@ function parseProfileFromTextNode(text, filename = 'resume.pdf') {
     experience,
     internships: [],
     certifications: [],
-    achievements: []
+    achievements: [],
+    detectedRole,
+    recommendedJobDescription
   };
 }
 

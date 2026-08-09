@@ -185,13 +185,22 @@ async function extractAndStoreProfile(resumeText, filename = 'resume.pdf', sourc
       console.warn('API resume parse notice (falling back to local engine):', e);
     }
 
-    window.AppState.setState({
+    const updates = {
       resumeFileName: filename,
       resumeText,
       resumeSource: source,
       candidateProfile: profile,
       isLoading: false
-    });
+    };
+
+    if (profile && profile.detectedRole) {
+      updates.targetRole = profile.detectedRole;
+    }
+    if (profile && profile.recommendedJobDescription) {
+      updates.jobDescription = profile.recommendedJobDescription;
+    }
+
+    window.AppState.setState(updates);
     return profile;
   } catch (err) {
     window.AppState.setLoading(false);

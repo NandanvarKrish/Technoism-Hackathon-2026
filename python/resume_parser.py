@@ -188,6 +188,51 @@ def extract_experience(exp_lines):
 
     return exp_list
 
+def detect_target_role_and_job_description(profile, raw_text):
+    text_lower = raw_text.lower()
+    skills = [s.lower() for s in profile.get("skills", [])]
+    langs = [l.lower() for l in profile.get("programmingLanguages", [])]
+    frameworks = [f.lower() for f in profile.get("frameworks", [])]
+
+    # Role detection logic
+    if any(k in text_lower for k in ["data engineer", "pyspark", "etl", "data warehouse", "pipeline"]):
+        detected_role = "Data & Backend Engineer"
+    elif any(k in text_lower for k in ["react", "frontend", "html5", "css3", "tailwind", "vue", "angular"]):
+        detected_role = "Associate Frontend Developer"
+    elif any(k in text_lower for k in ["full-stack", "fullstack", "node.js", "express", "react"]):
+        detected_role = "Full-Stack Software Engineer"
+    elif any(k in text_lower for k in ["machine learning", "ai", "pytorch", "tensorflow", "nlp"]):
+        detected_role = "AI / Machine Learning Engineer"
+    else:
+        detected_role = "Software Development Engineer"
+
+    # Build tailored job description matching extracted candidate profile
+    langs_str = ", ".join(profile.get("programmingLanguages", ["JavaScript", "Python"])[:4]) or "JavaScript, Python"
+    frameworks_str = ", ".join(profile.get("frameworks", ["React", "Node.js"])[:3]) or "React, Node.js"
+    databases_str = ", ".join(profile.get("databases", ["PostgreSQL", "MongoDB"])[:2]) or "PostgreSQL, MongoDB"
+    tools_str = ", ".join(profile.get("tools", ["Git", "GitHub"])[:2]) or "Git, GitHub"
+    top_skills_str = ", ".join(profile.get("skills", ["Software Engineering", "REST APIs"])[:5]) or "Software Engineering, REST APIs"
+
+    job_desc = f"""Role: {detected_role}
+Company: Target Engineering Team
+Location: Hybrid / Remote
+
+Job Overview:
+We are seeking a enthusiastic {detected_role} to join our core product engineering team. You will be responsible for creating modern, high-performance software applications, designing API integrations, and maintaining responsive web and data workflows.
+
+Key Responsibilities:
+- Develop clean, maintainable code using {langs_str}.
+- Collaborate with engineering teams to build modular applications using {frameworks_str}.
+- Design and query relational or non-relational databases including {databases_str}.
+- Maintain version control and release workflows using {tools_str}.
+- Optimize application performance, scalability, and security across production deployments.
+
+Requirements & Qualifications:
+- Solid technical foundation and hands-on experience in {top_skills_str}.
+- Strong problem-solving mindset, familiarity with software design patterns, and eagerness to learn."""
+
+    return detected_role, job_desc
+
 def parse_resume_to_candidate_profile(raw_text, filename="resume.pdf"):
     if not raw_text or len(raw_text.strip()) < 10:
         return {
@@ -237,6 +282,10 @@ def parse_resume_to_candidate_profile(raw_text, filename="resume.pdf"):
         "certifications": certifications,
         "achievements": achievements
     }
+
+    detected_role, recommended_jd = detect_target_role_and_job_description(profile, raw_text)
+    profile["detectedRole"] = detected_role
+    profile["recommendedJobDescription"] = recommended_jd
 
     return {
         "success": True,
