@@ -367,6 +367,9 @@ window.AiService = {
       if (cached) return JSON.parse(cached);
     } catch (e) {}
 
+    const appState = window.AppState ? window.AppState.getState() : {};
+    const candidateProfile = appState.candidateProfile || null;
+
     const deterministicResult = window.AtsEngine.analyzeMatch(resumeText, jobDescription, targetRole);
 
     // 1. Attempt Node.js / Express Backend API call
@@ -374,7 +377,8 @@ window.AiService = {
       const apiResponse = await this.fetchFromApi('/ats/analyze', {
         resumeText,
         jobDescription,
-        targetRole
+        targetRole,
+        candidateProfile
       });
       if (apiResponse && apiResponse.success && apiResponse.data) {
         try { localStorage.setItem(cacheKey, JSON.stringify(apiResponse.data)); } catch (e) {}
@@ -385,12 +389,17 @@ window.AiService = {
     }
 
     try {
-      const aiEnhancedResult = await this.executeAiRequestWithRetry(resumeText, jobDescription, targetRole, deterministicResult);
-      try { localStorage.setItem(cacheKey, JSON.stringify(aiEnhancedResult)); } catch (e) {}
-      return aiEnhancedResult;
+      const fallbackResult = await this.executeAiRequestWithRetry(resumeText, jobDescription, targetRole, deterministicResult);
+      try { localStorage.setItem(cacheKey, JSON.stringify(fallbackResult)); } catch (e) {}
+      return fallbackResult;
     } catch (err) {
       console.warn('AI Service ATS notice (using deterministic fallback):', err.message);
-      return deterministicResult;
+      return {
+        ...deterministicResult,
+        aiEnhanced: false,
+        isFallback: true,
+        source: 'Deterministic Fallback Analysis (API Offline)'
+      };
     }
   },
 
@@ -400,8 +409,10 @@ window.AiService = {
         try {
           const result = {
             ...fallbackData,
-            aiEnhanced: true,
-            semanticSummary: `AI evaluated candidate resume against ${targetRole} requirements. Core technical competencies match closely with target domain expectations.`
+            aiEnhanced: false,
+            isFallback: true,
+            source: 'Deterministic Fallback Analysis (API Offline)',
+            semanticSummary: `Deterministic ATS matching completed for ${targetRole}. Connect GEMINI_API_KEY for live AI semantic evaluation.`
           };
 
           if (this.validateAtsSchema(result)) {
@@ -410,7 +421,7 @@ window.AiService = {
             if (!isRetry) {
               resolve(this.executeAiRequestWithRetry(resumeText, jobDescription, targetRole, fallbackData, true));
             } else {
-              reject(new Error('AI response failed schema validation after retry.'));
+              reject(new Error('ATS response failed schema validation after retry.'));
             }
           }
         } catch (e) {

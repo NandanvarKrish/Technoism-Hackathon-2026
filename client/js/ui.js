@@ -131,9 +131,12 @@ window.UIController = {
     const scoreElem = document.getElementById('ats-score-number');
     if (scoreElem) scoreElem.textContent = result.score || result.matchScore;
 
-    // Target Role Label
+    // Target Role & Source Badge Label
     const roleElem = document.getElementById('ats-role-label');
-    if (roleElem) roleElem.textContent = result.targetRole || 'Target Role';
+    const sourceText = result.source || (result.aiEnhanced ? 'Gemini 2.5 Flash AI' : 'Deterministic Fallback Analysis (API Offline)');
+    if (roleElem) {
+      roleElem.innerHTML = `${result.targetRole || 'Target Role'} &bull; <span class="skill-tag ${result.aiEnhanced ? 'matched' : ''}" style="font-size:0.75rem; vertical-align:middle; font-weight:600;"><i class="fa-solid ${result.aiEnhanced ? 'fa-wand-magic-sparkles' : 'fa-gear'}"></i> ${sourceText}</span>`;
+    }
 
     // Category Breakdown List (Render 4 Weighted Categories)
     const container = document.getElementById('category-breakdown-container');
