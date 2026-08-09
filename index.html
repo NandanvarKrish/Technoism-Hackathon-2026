@@ -54,17 +54,17 @@
           <span class="step-num">2</span>
           <span>Resume</span>
         </button>
-        <button class="step-pill" data-screen="job">
-          <span class="step-num">3</span>
-          <span>Job Description</span>
-        </button>
         <button class="step-pill" data-screen="ats">
-          <span class="step-num">4</span>
+          <span class="step-num">3</span>
           <span>ATS Scorecard</span>
         </button>
         <button class="step-pill" data-screen="interview">
-          <span class="step-num">5</span>
+          <span class="step-num">4</span>
           <span>Mock Interview</span>
+        </button>
+        <button class="step-pill" data-screen="coding">
+          <span class="step-num">5</span>
+          <span>Company Coding</span>
         </button>
         <button class="step-pill" data-screen="report">
           <span class="step-num">6</span>
@@ -224,35 +224,7 @@
       </div>
     </section>
 
-    <!-- S03 — JOB DESCRIPTION SCREEN -->
-    <section class="screen-view" id="screen-job">
-      <div class="card-shell">
-        <div class="card-shell-header">
-          <h2><i class="fa-solid fa-briefcase"></i> Target Job Description</h2>
-          <p class="ui-text" style="color:var(--color-text-muted)">Provide the target role title and detailed job description for ATS matching.</p>
-          <div id="job-profile-badge-container" style="margin-top:0.5rem;"></div>
-        </div>
 
-        <div class="form-group">
-          <label class="form-label" for="target-role-input">Target Role Title *</label>
-          <input type="text" class="form-control" id="target-role-input" placeholder="e.g. Associate Frontend & Full-Stack Developer">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="job-desc-textarea">Job Description / Requirements *</label>
-          <textarea class="form-control" id="job-desc-textarea" placeholder="Paste the job description, required technical skills, tools, and experience expectations..."></textarea>
-        </div>
-
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2rem;">
-          <button class="btn btn-secondary" id="btn-use-sample-job" type="button">
-            <i class="fa-solid fa-flask"></i> Load Sample Job (Hackathon Demo)
-          </button>
-          <button class="btn btn-primary" id="btn-analyze-job" disabled type="button">
-            Run ATS Analysis <i class="fa-solid fa-chart-line"></i>
-          </button>
-        </div>
-      </div>
-    </section>
 
     <!-- S04 — ATS SCORECARD SCREEN -->
     <section class="screen-view" id="screen-ats">
@@ -281,10 +253,10 @@
           <div style="text-align:center">
             <div class="score-badge-circle">
               <span class="score-number" id="ats-score-number">--</span>
-              <span class="score-label">MATCH SCORE</span>
+              <span class="score-label">ATS SCORE</span>
             </div>
             <div style="font-family:var(--font-mono); font-size:0.75rem; color:var(--color-text-muted); margin-top:0.5rem;">
-              ATS-Style Match Score
+              AI Resume ATS Score
             </div>
           </div>
           <div>

@@ -2,40 +2,46 @@
 
 exports.generateQuestions = (req, res) => {
   try {
-    const { targetRole, jobDescription, resumeText, questionCount = 3 } = req.body;
-    const role = targetRole || 'Software Engineering Candidate';
+    const { detectedRole, targetRole, candidateProfile, atsResult, resumeText, questionCount = 3 } = req.body;
+    const profile = candidateProfile || {};
+    const role = detectedRole || targetRole || profile.detectedRole || 'Software Engineering Candidate';
     const count = parseInt(questionCount, 10) || 3;
+
+    const projects = profile.projects || [];
+    const mainProject = projects.length > 0 ? projects[0].name : 'your primary web/data project';
+    const topSkills = profile.skills || ['JavaScript', 'Software Engineering'];
+    const weaknesses = atsResult?.weaknesses || ['quantifiable impact metrics'];
 
     const baseQuestions = [
       {
         id: `q_${Date.now()}_1`,
-        question: `Based on your interest in ${role}, how does your academic or project background prepare you for this position?`,
-        difficulty: 'Easy',
-        focus: 'Background & Role Alignment'
+        question: `Based on your experience with ${topSkills.slice(0, 3).join(', ')} as a ${role}, how did you design the architecture for "${mainProject}"?`,
+        difficulty: 'Medium',
+        focus: 'Project Architecture & Technical Depth'
       },
       {
         id: `q_${Date.now()}_2`,
-        question: 'Explain how you approach structuring clean, maintainable web application components and handling asynchronous data flows.',
+        question: `Your ATS audit highlighted opportunities to improve ${weaknesses[0] || 'code metrics'}. How do you measure and optimize technical performance in production?`,
         difficulty: 'Medium',
-        focus: 'Technical Architecture & Code Quality'
+        focus: 'Performance & Engineering Standards'
       },
       {
         id: `q_${Date.now()}_3`,
-        question: 'Describe a challenging engineering bug or project obstacle you encountered. How did you isolate and resolve it?',
+        question: `Describe a complex technical challenge or debugging obstacle you faced while building ${mainProject}. How did you systematically isolate and resolve it?`,
         difficulty: 'Hard',
-        focus: 'Problem Solving & Debugging'
+        focus: 'Debugging & Problem Solving'
       },
       {
         id: `q_${Date.now()}_4`,
-        question: 'How do you optimize application performance and responsive UI layouts across mobile and desktop devices?',
+        question: `How do you ensure data integrity, responsive layout stability, and security standards when developing features in ${role}?`,
         difficulty: 'Medium',
-        focus: 'Performance & Responsive Design'
+        focus: 'System Integrity & Security'
       },
       {
         id: `q_${Date.now()}_5`,
-        question: 'How do you prioritize code refactoring versus delivering new features under tight project deadlines?',
+        question: `How do you handle technical trade-offs between refactoring legacy code versus delivering new features under tight deadline constraints?`,
         difficulty: 'Medium',
-        focus: 'Software Engineering Standards & Tradeoffs'
+        focus: 'Engineering Tradeoffs & Prioritization'
       }
     ];
 
@@ -45,6 +51,7 @@ exports.generateQuestions = (req, res) => {
       success: true,
       data: {
         targetRole: role,
+        detectedRole: role,
         questionCount: questions.length,
         questions
       }

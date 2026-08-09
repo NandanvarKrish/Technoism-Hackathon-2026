@@ -154,19 +154,53 @@ function bindUploadEvents() {
     });
   }
 
-  // Upload Continue Action
+  // Upload Continue Action (Triggers Automatic Resume-Driven ATS Analysis)
   document.getElementById('btn-upload-continue').addEventListener('click', async () => {
     const state = window.AppState.getState();
-    if (!state.resumeText || state.resumeText.trim().length < 20) {
+    if (!state.resumeText || state.resumeText.trim().length < 15) {
       window.AppState.setError('Extracted Text Missing or Too Short', 'Please select a valid resume file or paste text manually before continuing.');
       return;
     }
-    if (!state.candidateProfile) {
-      window.AppState.setLoading(true, 'Extracting candidate profile from resume text...');
-      await extractAndStoreProfile(state.resumeText, state.resumeFileName || 'resume.pdf', state.resumeSource || 'file');
-    }
-    window.AppState.setScreen('job');
+    
+    await runAutomaticAtsAnalysis(state.resumeText, state.resumeFileName || 'resume.pdf', state.resumeSource || 'file');
   });
+}
+
+// Helper to run full automatic Resume Processing & ATS Analysis pipeline
+async function runAutomaticAtsAnalysis(resumeText, filename = 'resume.pdf', source = 'file') {
+  console.log('[Resume] Text extracted');
+  window.AppState.setLoading(true, 'Reading resume & extracting candidate profile...');
+  window.AppState.clearError();
+
+  try {
+    // Stage 1: Extract candidate profile
+    const profile = await extractAndStoreProfile(resumeText, filename, source);
+    console.log('[Resume] Candidate profile created');
+
+    // Stage 2: Evaluate technical skills & project experience
+    console.log('[ATS] Service loaded:', typeof window.AtsEngine !== 'undefined' ? 'OK' : 'Fallback Inline');
+    console.log('[ATS] Analysis started');
+    window.AppState.setLoading(true, 'Analyzing technical skills, projects, and career readiness...');
+
+    // Stage 3: Generate AI Resume ATS Analysis
+    console.log('[ATS] Gemini request started');
+    const atsResult = await window.AiService.analyzeResumeSemantics(resumeText, profile);
+    console.log('[ATS] Gemini response received');
+    console.log('[ATS] Analysis validated');
+
+    window.AppState.setState({
+      atsResult,
+      isLoading: false
+    });
+    console.log('[ATS] Score saved');
+
+    // Stage 4: Automatically navigate to ATS Scorecard
+    console.log('[ATS] Navigating to scorecard');
+    window.AppState.setScreen('ats');
+  } catch (err) {
+    window.AppState.setLoading(false);
+    window.AppState.setError('ATS Analysis Failed', err.message);
+  }
 }
 
 // Helper to extract & store Candidate Profile via REST API / Engine
@@ -190,28 +224,14 @@ async function extractAndStoreProfile(resumeText, filename = 'resume.pdf', sourc
       resumeText,
       resumeSource: source,
       candidateProfile: profile,
-      profileSource: 'resume-derived',
-      isLoading: false
+      detectedRole: profile ? (profile.detectedRole || profile.headline) : null
     };
-
-    if (profile && profile.detectedRole) {
-      updates.targetRole = profile.detectedRole;
-    }
-    if (profile && profile.recommendedJobDescription) {
-      updates.jobDescription = profile.recommendedJobDescription;
-    }
-    if (profile && profile.targetRoleConfidence) {
-      updates.targetRoleConfidence = profile.targetRoleConfidence;
-    }
-    if (profile && profile.targetRoleEvidence) {
-      updates.targetRoleEvidence = profile.targetRoleEvidence;
-    }
 
     window.AppState.setState(updates);
     return profile;
   } catch (err) {
-    window.AppState.setLoading(false);
     console.error('Profile extraction error:', err);
+    return null;
   }
 }
 
@@ -237,87 +257,13 @@ async function handleSelectedFile(file) {
       resumeSource: 'file'
     });
 
-    await extractAndStoreProfile(extractedText, file.name, 'file');
+    await runAutomaticAtsAnalysis(extractedText, file.name, 'file');
   } catch (err) {
     window.AppState.setLoading(false);
     window.AppState.setError(`Text Extraction Failed (${file.name})`, err.message, () => {
       document.getElementById('manual-text-area').style.display = 'block';
     });
   }
-}
-
-// S03 Job Description Handlers
-function bindJobDescriptionEvents() {
-  const roleInput = document.getElementById('target-role-input');
-  const descTextarea = document.getElementById('job-desc-textarea');
-
-  const checkInputs = () => {
-    const roleVal = roleInput.value;
-    const descVal = descTextarea.value;
-    const currentState = window.AppState.getState();
-    
-    // Track user edit mode
-    let source = currentState.profileSource || 'resume-derived';
-    if (source === 'resume-derived' && (roleVal !== currentState.targetRole || descVal !== currentState.jobDescription)) {
-      source = 'resume-derived-edited';
-    }
-
-    window.AppState.setState({
-      targetRole: roleVal,
-      jobDescription: descVal,
-      profileSource: source
-    });
-  };
-
-  roleInput.addEventListener('input', checkInputs);
-  descTextarea.addEventListener('input', checkInputs);
-
-  // Load Sample Job Description (Actual Company JD Priority)
-  document.getElementById('btn-use-sample-job').addEventListener('click', () => {
-    const sampleDesc = window.SAMPLE_DATA.sampleJobDescription;
-    const sampleRole = 'Associate Frontend & Full-Stack Developer';
-
-    roleInput.value = sampleRole;
-    descTextarea.value = sampleDesc;
-
-    window.AppState.setState({
-      targetRole: sampleRole,
-      jobDescription: sampleDesc,
-      profileSource: 'actual-jd',
-      errorState: null
-    });
-  });
-
-  // Analyze ATS Match Action
-  document.getElementById('btn-analyze-job').addEventListener('click', async () => {
-    const state = window.AppState.getState();
-    if (!state.targetRole || state.targetRole.trim().length === 0) {
-      window.AppState.setError('Missing Target Role', 'Please enter a target role or job title to analyze.');
-      return;
-    }
-    if (!state.jobDescription || state.jobDescription.trim().length < 15) {
-      window.AppState.setError('Job Description Too Short', 'Please enter or paste a job description of at least 15 characters to run ATS matching.');
-      return;
-    }
-
-    window.AppState.setLoading(true, 'Running ATS-style matching engine & category analysis...');
-    window.AppState.clearError();
-
-    try {
-      // Execute Semantic / Deterministic ATS Matching
-      const atsResult = await window.AiService.analyzeResumeSemantics(
-        state.resumeText,
-        state.jobDescription,
-        state.targetRole
-      );
-
-      window.AppState.setState({ atsResult, isLoading: false });
-      window.AppState.setScreen('ats');
-    } catch (err) {
-      window.AppState.setLoading(false);
-      window.AppState.setError('ATS Analysis Failed', err.message);
-    }
-  });
 }
 
 // S04 ATS Scorecard Handlers
@@ -442,7 +388,7 @@ function bindReportEvents() {
   });
 
   document.getElementById('btn-try-another-role').addEventListener('click', () => {
-    window.AppState.setScreen('job');
+    window.AppState.setScreen('upload');
   });
 }
 

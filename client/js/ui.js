@@ -105,51 +105,21 @@ window.UIController = {
     }
   },
 
-  // S03 — Job Description Screen Updates
-  renderJobScreen(state) {
-    const roleInput = document.getElementById('target-role-input');
-    const descTextarea = document.getElementById('job-desc-textarea');
-    const analyzeBtn = document.getElementById('btn-analyze-job');
-    const badgeContainer = document.getElementById('job-profile-badge-container');
-
-    if (roleInput && state.targetRole && roleInput.value !== state.targetRole) {
-      roleInput.value = state.targetRole;
-    }
-    if (descTextarea && state.jobDescription && descTextarea.value !== state.jobDescription) {
-      descTextarea.value = state.jobDescription;
-    }
-
-    if (badgeContainer) {
-      const source = state.profileSource || 'resume-derived';
-      const confidencePct = Math.round((state.targetRoleConfidence || 0.96) * 100);
-      
-      if (source === 'actual-jd') {
-        badgeContainer.innerHTML = `<span class="skill-tag" style="font-size:0.75rem; background:rgba(41, 54, 129, 0.1); color:var(--color-deep-blue); font-weight:600;"><i class="fa-solid fa-briefcase"></i> Actual Job Description Mode (Priority Active)</span>`;
-      } else if (source === 'resume-derived-edited') {
-        badgeContainer.innerHTML = `<span class="skill-tag" style="font-size:0.75rem; background:rgba(66, 116, 217, 0.1); color:var(--color-action-blue); font-weight:600;"><i class="fa-solid fa-pen-to-square"></i> Resume-Derived Profile (User Edited)</span>`;
-      } else {
-        badgeContainer.innerHTML = `<span class="skill-tag matched" style="font-size:0.75rem; font-weight:600;"><i class="fa-solid fa-wand-magic-sparkles"></i> AI-Generated from your Resume (${confidencePct}% Confidence)</span>`;
-      }
-    }
-
-    const isValid = (roleInput && roleInput.value.trim().length > 0) && (descTextarea && descTextarea.value.trim().length > 15);
-    if (analyzeBtn) analyzeBtn.disabled = !isValid;
-  },
-
-  // S04 — ATS Scorecard Screen Updates
+  // S04 — AI Resume ATS Scorecard Screen Updates
   renderAtsScreen(state) {
     const result = state.atsResult;
     if (!result) return;
 
-    // ATS Match Score Number
+    // AI Resume ATS Score Number
     const scoreElem = document.getElementById('ats-score-number');
-    if (scoreElem) scoreElem.textContent = result.score || result.matchScore;
+    if (scoreElem) scoreElem.textContent = result.score || result.overallScore || result.matchScore;
 
-    // Target Role & Source Badge Label
+    // Primary Detected Role & Source Badge Label
     const roleElem = document.getElementById('ats-role-label');
-    const sourceText = result.source || (result.aiEnhanced ? 'Gemini 2.5 Flash AI' : 'Deterministic Fallback Analysis (API Offline)');
+    const sourceText = result.source || (result.aiEnhanced ? 'Gemini 2.5 Flash AI' : 'Deterministic Resume ATS Engine (API Offline)');
+    const primaryRole = result.targetRole || (state.candidateProfile ? state.candidateProfile.detectedRole : 'Software Engineering Candidate');
     if (roleElem) {
-      roleElem.innerHTML = `${result.targetRole || 'Target Role'} &bull; <span class="skill-tag ${result.aiEnhanced ? 'matched' : ''}" style="font-size:0.75rem; vertical-align:middle; font-weight:600;"><i class="fa-solid ${result.aiEnhanced ? 'fa-wand-magic-sparkles' : 'fa-gear'}"></i> ${sourceText}</span>`;
+      roleElem.innerHTML = `Primary Role: <strong>${primaryRole}</strong> &bull; <span class="skill-tag ${result.aiEnhanced ? 'matched' : ''}" style="font-size:0.75rem; vertical-align:middle; font-weight:600;"><i class="fa-solid ${result.aiEnhanced ? 'fa-wand-magic-sparkles' : 'fa-gear'}"></i> ${sourceText}</span>`;
     }
 
     // Category Breakdown List (Render 4 Weighted Categories)

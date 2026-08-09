@@ -6,22 +6,19 @@ class StateStore {
     
     // Initial State Structure
     this.state = {
-      currentScreen: 'landing', // 'landing' | 'upload' | 'job' | 'ats' | 'interview' | 'report'
+      currentScreen: 'landing', // 'landing' | 'upload' | 'ats' | 'interview' | 'coding' | 'report'
       
-      // Resume Data
+      // Resume & Candidate Data
       resumeFile: null,
       resumeFileName: '',
       resumeFileType: '',
       resumeText: '',
       resumeSource: 'none', // 'file' | 'manual' | 'sample'
-      candidateProfile: null, // Dynamic extracted profile: { name, education, skills, programmingLanguages, frameworks, databases, tools, projects, experience, internships, certifications, achievements }
+      candidateProfile: null,
+      detectedRole: null,
       
-      // Job Description Context
-      targetRole: '',
-      jobDescription: '',
-      
-      // ATS Scorecard Result
-      atsResult: null, // { matchScore, categoryBreakdown, matchedSkills, missingSkills, strengths, suggestions }
+      // AI Resume ATS Scorecard Result
+      atsResult: null, // { score, overallScore, categoryScores, categories, matchedSkills, missingSkills, strengths, recommendations }
       
       // Mock Interview State & Configuration
       interviewSetup: {
