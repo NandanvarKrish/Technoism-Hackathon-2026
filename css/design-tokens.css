@@ -1,0 +1,56 @@
+/* TECHNOISM HACKATHON 2026 — UI/UX Design System Tokens */
+:root {
+  /* Brand Typography */
+  --font-heading: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Noto Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-ui: 'Nunito Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+
+  /* Official Color Palette */
+  --color-deep-blue: #293681;      /* Primary Brand / Major Headings / Nav */
+  --color-action-blue: #4274D9;    /* Primary Action CTAs / Links / Active States */
+  --color-light-cyan: #95CCDD;     /* Secondary Accents / Highlights */
+  --color-pale-aqua: #D0E7E6;      /* Soft Backgrounds / Cards */
+
+  /* Derived Tones & States */
+  --color-deep-blue-dark: #1e2863;
+  --color-deep-blue-light: #37469e;
+  --color-action-hover: #3361be;
+  --color-action-light: #e8f0fe;
+
+  --color-bg-main: #f4f8fb;
+  --color-bg-card: #ffffff;
+  --color-bg-glass: rgba(255, 255, 255, 0.85);
+
+  --color-text-main: #1e293b;
+  --color-text-muted: #64748b;
+  --color-text-light: #94a3b8;
+  --color-text-inverse: #ffffff;
+
+  /* Indicator Colors */
+  --color-success: #10b981;
+  --color-success-bg: #d1fae5;
+  --color-warning: #f59e0b;
+  --color-warning-bg: #fef3c7;
+  --color-error: #ef4444;
+  --color-error-bg: #fee2e2;
+
+  /* Borders & Radii */
+  --border-color-subtle: rgba(41, 54, 129, 0.12);
+  --border-color-strong: rgba(41, 54, 129, 0.25);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  /* Shadows & Elevation */
+  --shadow-sm: 0 2px 8px rgba(41, 54, 129, 0.05);
+  --shadow-md: 0 8px 24px rgba(41, 54, 129, 0.08);
+  --shadow-lg: 0 16px 36px rgba(41, 54, 129, 0.12);
+  --shadow-action: 0 8px 20px rgba(66, 116, 217, 0.3);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
