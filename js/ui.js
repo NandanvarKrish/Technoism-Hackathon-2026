@@ -309,48 +309,57 @@ window.UIController = {
 
   // S06 — Final Scorecard Screen Updates
   renderReportScreen(state) {
-    const report = state.finalReport;
+    const report = state.finalReport || (window.ReportBuilder ? window.ReportBuilder.generateFinalReport() : null);
     if (!report) return;
 
     const roleLabel = document.getElementById('report-target-role-label');
-    if (roleLabel) roleLabel.textContent = `Consolidated ATS screening and AI mock interview readiness assessment for ${report.targetRole || 'Target Role'}.`;
+    if (roleLabel) roleLabel.textContent = `Consolidated three-stage ATS, General Interview, and Company Coding readiness assessment for ${report.targetRole || 'Target Role'}.`;
 
     const atsScoreElem = document.getElementById('final-ats-score');
-    if (atsScoreElem) atsScoreElem.textContent = report.atsScore;
+    if (atsScoreElem) atsScoreElem.textContent = report.atsScoreDisplay || (report.atsScore !== null ? `${report.atsScore}%` : 'Not completed');
 
     const intScoreElem = document.getElementById('final-interview-score');
-    if (intScoreElem) intScoreElem.textContent = report.interviewScore;
+    if (intScoreElem) intScoreElem.textContent = report.interviewScoreDisplay || (report.interviewScore !== null ? `${report.interviewScore}%` : 'Not completed');
+
+    const codeScoreElem = document.getElementById('final-coding-score');
+    if (codeScoreElem) codeScoreElem.textContent = report.codingScoreDisplay || (report.codingScore !== null ? `${report.codingScore}%` : 'Not completed');
 
     const readinessScoreElem = document.getElementById('final-readiness-score');
-    if (readinessScoreElem) readinessScoreElem.textContent = report.readinessScore;
+    if (readinessScoreElem) readinessScoreElem.textContent = report.readinessScoreDisplay || (report.readinessScore !== null ? `${report.readinessScore}%` : 'Incomplete');
 
     const levelElem = document.getElementById('final-readiness-level');
-    if (levelElem) levelElem.textContent = report.readinessLevel;
+    if (levelElem) levelElem.textContent = report.readinessLevel || 'OVERALL PREPARATION';
 
     // Sub-metrics
     const relElem = document.getElementById('report-relevance-score');
-    if (relElem) relElem.textContent = `${report.relevanceScore}%`;
+    if (relElem) relElem.textContent = typeof report.relevanceScore === 'number' ? `${report.relevanceScore}%` : report.relevanceScore;
 
     const claElem = document.getElementById('report-clarity-score');
-    if (claElem) claElem.textContent = `${report.clarityScore}%`;
+    if (claElem) claElem.textContent = typeof report.clarityScore === 'number' ? `${report.clarityScore}%` : report.clarityScore;
 
     const strElem = document.getElementById('report-structure-score');
-    if (strElem) strElem.textContent = `${report.structureScore}%`;
+    if (strElem) strElem.textContent = typeof report.structureScore === 'number' ? `${report.structureScore}%` : report.structureScore;
 
     // Strengths, Gaps, Actions Lists
     const strengthsContainer = document.getElementById('final-strengths-list');
     if (strengthsContainer && report.strengths) {
-      strengthsContainer.innerHTML = report.strengths.map(s => `<li>${s}</li>`).join('');
+      strengthsContainer.innerHTML = report.strengths.length > 0
+        ? report.strengths.map(s => `<li>${s}</li>`).join('')
+        : '<li>Complete preparation stages to generate candidate strengths.</li>';
     }
 
     const gapsContainer = document.getElementById('final-gaps-list');
     if (gapsContainer && report.gaps) {
-      gapsContainer.innerHTML = report.gaps.map(g => `<li>${g}</li>`).join('');
+      gapsContainer.innerHTML = report.gaps.length > 0
+        ? report.gaps.map(g => `<li>${g}</li>`).join('')
+        : '<li>No major gaps identified across completed rounds.</li>';
     }
 
     const actionsContainer = document.getElementById('final-actions-list');
     if (actionsContainer && report.nextActions) {
-      actionsContainer.innerHTML = report.nextActions.map(a => `<li>${a}</li>`).join('');
+      actionsContainer.innerHTML = report.nextActions.length > 0
+        ? report.nextActions.map(a => `<li>${a}</li>`).join('')
+        : '<li>Complete all three preparation rounds to receive personalized next actions.</li>';
     }
   }
 };

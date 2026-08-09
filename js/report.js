@@ -1,49 +1,87 @@
-/* TECHNOISM HACKATHON 2026 — Final Report Builder */
+/* TECHNOISM HACKATHON 2026 — Final Three-Stage Scorecard Report Builder */
 
 window.ReportBuilder = {
   generateFinalReport() {
     const state = window.AppState.getState();
-    const { atsResult, interviewResult, targetRole } = state;
+    const { atsResult, interviewResult, codingResult, codingSubmission, targetRole, selectedCompany } = state;
 
-    const atsScore = atsResult ? (atsResult.score || atsResult.matchScore || 75) : 75;
-    const interviewScore = interviewResult ? (interviewResult.interviewScore || 80) : 80;
+    const weights = (window.APP_CONFIG && window.APP_CONFIG.SCORE_WEIGHTS)
+      ? window.APP_CONFIG.SCORE_WEIGHTS
+      : { ats: 0.30, interview: 0.35, coding: 0.35 };
 
-    const relevanceScore = interviewResult ? (interviewResult.relevanceScore || 80) : 80;
-    const clarityScore = interviewResult ? (interviewResult.clarityScore || 82) : 82;
-    const structureScore = interviewResult ? (interviewResult.structureScore || 78) : 78;
+    const atsScore = (atsResult && typeof atsResult.overallScore === 'number') ? atsResult.overallScore : null;
+    const interviewScore = (interviewResult && typeof interviewResult.overallScore === 'number') ? interviewResult.overallScore : null;
+    const codingScore = (codingSubmission && typeof codingSubmission.score === 'number') 
+      ? codingSubmission.score 
+      : (codingResult && typeof codingResult.overallScore === 'number' ? codingResult.overallScore : null);
 
-    // Combined overall readiness score calculation
-    // ATS Resume Fit: 45%, Mock Interview Readiness: 55%
-    const readinessScore = Math.round((atsScore * 0.45) + (interviewScore * 0.55));
+    const isAtsDone = atsScore !== null;
+    const isInterviewDone = interviewScore !== null;
+    const isCodingDone = codingScore !== null;
 
-    let readinessLevel = 'Job Ready Candidate';
-    if (readinessScore >= 85) readinessLevel = 'High Readiness / Strong Role Fit';
-    else if (readinessScore >= 70) readinessLevel = 'Job Ready / Moderate Fit';
-    else readinessLevel = 'Needs Targeted Skill Development';
+    let readinessScore = null;
+    let readinessLevel = 'Incomplete Assessment';
 
+    if (isAtsDone && isInterviewDone && isCodingDone) {
+      readinessScore = Math.round(
+        (atsScore * weights.ats) +
+        (interviewScore * weights.interview) +
+        (codingScore * weights.coding)
+      );
+
+      if (readinessScore >= 85) readinessLevel = 'High Readiness / Exceptional Role Fit';
+      else if (readinessScore >= 70) readinessLevel = 'Job Ready / Solid Candidate Fit';
+      else readinessLevel = 'Needs Targeted Development';
+    }
+
+    const relevanceScore = interviewResult ? (interviewResult.averageRelevance || 80) : '--';
+    const clarityScore = interviewResult ? (interviewResult.averageClarity || 85) : '--';
+    const structureScore = interviewResult ? (interviewResult.averageStructure || 80) : '--';
+
+    // Synthesize Strengths across all 3 rounds
     const combinedStrengths = [
       ...(atsResult && atsResult.strengths ? atsResult.strengths : []),
-      ...(interviewResult && interviewResult.strengths ? interviewResult.strengths : [])
+      ...(interviewResult && interviewResult.strongestAreas ? interviewResult.strongestAreas.map(s => `Interview strength: ${s}`) : []),
+      ...(isCodingDone ? [`Demonstrated coding efficiency (${codingSubmission?.complexity?.time || 'O(N)'} time complexity)`] : [])
     ];
 
+    // Synthesize Gaps & Weaknesses across all 3 rounds
     const combinedGaps = [
-      ...(atsResult && atsResult.missingSkills && atsResult.missingSkills.length > 0
-        ? atsResult.missingSkills.map(s => `Missing ATS keyword evidence: ${s}`) 
-        : []),
-      ...(interviewResult && interviewResult.improvements ? interviewResult.improvements : [])
+      ...(atsResult && atsResult.weaknesses ? atsResult.weaknesses : []),
+      ...(interviewResult && interviewResult.weakestAreas ? interviewResult.weakestAreas.map(w => `Interview gap: ${w}`) : []),
+      ...(codingSubmission && codingSubmission.status !== 'Accepted' ? [`Coding execution issue: ${codingSubmission.status}`] : [])
     ];
 
-    const nextActions = [
-      `Add explicit resume evidence and project bullets for missing keywords (${atsResult && atsResult.missingSkills ? atsResult.missingSkills.slice(0, 3).join(', ') : 'target technical skills'}).`,
-      `Practice structuring behavioral interview responses using the STAR method (Situation, Task, Action, Result).`,
-      `Quantify personal project outcomes with measurable performance metrics (e.g., % improvement, user count, or speed gains).`,
-      `Review technical fundamentals for ${targetRole || 'target role'} prior to live technical screening.`
-    ];
+    // Personalized Recommendations based on actual round performance
+    const personalizedActions = [];
+
+    if (atsResult && atsResult.missingSkills && atsResult.missingSkills.length > 0) {
+      personalizedActions.push(`Incorporate explicit resume evidence and metrics for missing skills: ${atsResult.missingSkills.slice(0, 3).join(', ')}.`);
+    }
+
+    if (interviewResult && interviewResult.weakestAreas && interviewResult.weakestAreas.length > 0) {
+      personalizedActions.push(`Refine technical communication and STAR structure for: ${interviewResult.weakestAreas.slice(0, 2).join(', ')}.`);
+    }
+
+    if (codingSubmission) {
+      if (codingSubmission.status !== 'Accepted') {
+        personalizedActions.push(`Prioritize debugging edge cases and algorithmic practice for ${selectedCompany || 'target company'} coding rounds.`);
+      } else {
+        personalizedActions.push(`Maintain optimal ${codingSubmission.complexity?.time || 'O(N)'} algorithmic efficiency in live pair-programming screenings.`);
+      }
+    } else {
+      personalizedActions.push(`Complete the Company Coding Round to receive tailored algorithmic preparation advice.`);
+    }
 
     const report = {
       targetRole: targetRole || 'Target Role',
+      atsScoreDisplay: isAtsDone ? `${atsScore}%` : 'Not completed',
+      interviewScoreDisplay: isInterviewDone ? `${interviewScore}%` : 'Not completed',
+      codingScoreDisplay: isCodingDone ? `${codingScore}%` : 'Not completed',
       atsScore,
       interviewScore,
+      codingScore,
+      readinessScoreDisplay: readinessScore !== null ? `${readinessScore}%` : 'Not completed',
       readinessScore,
       readinessLevel,
       relevanceScore,
@@ -51,11 +89,10 @@ window.ReportBuilder = {
       structureScore,
       strengths: [...new Set(combinedStrengths)],
       gaps: [...new Set(combinedGaps)],
-      nextActions: [...new Set(nextActions)]
+      nextActions: [...new Set(personalizedActions)]
     };
 
     window.AppState.setState({ finalReport: report });
     return report;
   }
 };
-

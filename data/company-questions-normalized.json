@@ -1,0 +1,702 @@
+{
+  "updatedAt": "2026-08-09T09:56:48.413Z",
+  "companies": [
+    {
+      "id": "google",
+      "name": "Google",
+      "questionCount": 5
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon",
+      "questionCount": 5
+    },
+    {
+      "id": "microsoft",
+      "name": "Microsoft",
+      "questionCount": 4
+    },
+    {
+      "id": "meta",
+      "name": "Meta",
+      "questionCount": 4
+    },
+    {
+      "id": "apple",
+      "name": "Apple",
+      "questionCount": 2
+    },
+    {
+      "id": "netflix",
+      "name": "Netflix",
+      "questionCount": 2
+    }
+  ],
+  "questions": [
+    {
+      "id": "q_two_sum",
+      "title": "Two Sum",
+      "difficulty": "Easy",
+      "topic": "Array & Hash Table",
+      "sourceUrl": "https://leetcode.com/problems/two-sum/",
+      "description": "Given problem requirements for \"Two Sum\" (Array & Hash Table). Implement an optimal algorithmic solution.",
+      "starterCode": "function twoSum(input) {\n  // Write your solution for Two Sum here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_longest_substring_without_repeating_characters",
+      "title": "Longest Substring Without Repeating Characters",
+      "difficulty": "Medium",
+      "topic": "Sliding Window",
+      "sourceUrl": "https://leetcode.com/problems/longest-substring-without-repeating-characters/",
+      "description": "Given problem requirements for \"Longest Substring Without Repeating Characters\" (Sliding Window). Implement an optimal algorithmic solution.",
+      "starterCode": "function longestSubstringWithoutRepeatingCharacters(input) {\n  // Write your solution for Longest Substring Without Repeating Characters here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_median_of_two_sorted_arrays",
+      "title": "Median of Two Sorted Arrays",
+      "difficulty": "Hard",
+      "topic": "Binary Search",
+      "sourceUrl": "https://leetcode.com/problems/median-of-two-sorted-arrays/",
+      "description": "Given problem requirements for \"Median of Two Sorted Arrays\" (Binary Search). Implement an optimal algorithmic solution.",
+      "starterCode": "function medianofTwoSortedArrays(input) {\n  // Write your solution for Median of Two Sorted Arrays here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_container_with_most_water",
+      "title": "Container With Most Water",
+      "difficulty": "Medium",
+      "topic": "Two Pointers",
+      "sourceUrl": "https://leetcode.com/problems/container-with-most-water/",
+      "description": "Given problem requirements for \"Container With Most Water\" (Two Pointers). Implement an optimal algorithmic solution.",
+      "starterCode": "function containerWithMostWater(input) {\n  // Write your solution for Container With Most Water here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_word_ladder",
+      "title": "Word Ladder",
+      "difficulty": "Hard",
+      "topic": "Breadth-First Search",
+      "sourceUrl": "https://leetcode.com/problems/word-ladder/",
+      "description": "Given problem requirements for \"Word Ladder\" (Breadth-First Search). Implement an optimal algorithmic solution.",
+      "starterCode": "function wordLadder(input) {\n  // Write your solution for Word Ladder here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_lru_cache",
+      "title": "LRU Cache",
+      "difficulty": "Medium",
+      "topic": "Design & Linked List",
+      "sourceUrl": "https://leetcode.com/problems/lru-cache/",
+      "description": "Given problem requirements for \"LRU Cache\" (Design & Linked List). Implement an optimal algorithmic solution.",
+      "starterCode": "function lRUCache(input) {\n  // Write your solution for LRU Cache here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_number_of_islands",
+      "title": "Number of Islands",
+      "difficulty": "Medium",
+      "topic": "Depth-First Search",
+      "sourceUrl": "https://leetcode.com/problems/number-of-islands/",
+      "description": "Given problem requirements for \"Number of Islands\" (Depth-First Search). Implement an optimal algorithmic solution.",
+      "starterCode": "function numberofIslands(input) {\n  // Write your solution for Number of Islands here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_trapping_rain_water",
+      "title": "Trapping Rain Water",
+      "difficulty": "Hard",
+      "topic": "Two Pointers & Stack",
+      "sourceUrl": "https://leetcode.com/problems/trapping-rain-water/",
+      "description": "Given problem requirements for \"Trapping Rain Water\" (Two Pointers & Stack). Implement an optimal algorithmic solution.",
+      "starterCode": "function trappingRainWater(input) {\n  // Write your solution for Trapping Rain Water here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_reorganize_string",
+      "title": "Reorganize String",
+      "difficulty": "Medium",
+      "topic": "Heap & Greedy",
+      "sourceUrl": "https://leetcode.com/problems/reorganize-string/",
+      "description": "Given problem requirements for \"Reorganize String\" (Heap & Greedy). Implement an optimal algorithmic solution.",
+      "starterCode": "function reorganizeString(input) {\n  // Write your solution for Reorganize String here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_valid_parentheses",
+      "title": "Valid Parentheses",
+      "difficulty": "Easy",
+      "topic": "Stack",
+      "sourceUrl": "https://leetcode.com/problems/valid-parentheses/",
+      "description": "Given problem requirements for \"Valid Parentheses\" (Stack). Implement an optimal algorithmic solution.",
+      "starterCode": "function validParentheses(input) {\n  // Write your solution for Valid Parentheses here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_spiral_matrix",
+      "title": "Spiral Matrix",
+      "difficulty": "Medium",
+      "topic": "Matrix",
+      "sourceUrl": "https://leetcode.com/problems/spiral-matrix/",
+      "description": "Given problem requirements for \"Spiral Matrix\" (Matrix). Implement an optimal algorithmic solution.",
+      "starterCode": "function spiralMatrix(input) {\n  // Write your solution for Spiral Matrix here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_search_in_rotated_sorted_array",
+      "title": "Search in Rotated Sorted Array",
+      "difficulty": "Medium",
+      "topic": "Binary Search",
+      "sourceUrl": "https://leetcode.com/problems/search-in-rotated-sorted-array/",
+      "description": "Given problem requirements for \"Search in Rotated Sorted Array\" (Binary Search). Implement an optimal algorithmic solution.",
+      "starterCode": "function searchinRotatedSortedArray(input) {\n  // Write your solution for Search in Rotated Sorted Array here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_serialize_and_deserialize_binary_tree",
+      "title": "Serialize and Deserialize Binary Tree",
+      "difficulty": "Hard",
+      "topic": "Tree & Design",
+      "sourceUrl": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/",
+      "description": "Given problem requirements for \"Serialize and Deserialize Binary Tree\" (Tree & Design). Implement an optimal algorithmic solution.",
+      "starterCode": "function serializeandDeserializeBinaryTree(input) {\n  // Write your solution for Serialize and Deserialize Binary Tree here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_merge_intervals",
+      "title": "Merge Intervals",
+      "difficulty": "Medium",
+      "topic": "Sorting & Array",
+      "sourceUrl": "https://leetcode.com/problems/merge-intervals/",
+      "description": "Given problem requirements for \"Merge Intervals\" (Sorting & Array). Implement an optimal algorithmic solution.",
+      "starterCode": "function mergeIntervals(input) {\n  // Write your solution for Merge Intervals here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_minimum_remove_to_make_valid_parentheses",
+      "title": "Minimum Remove to Make Valid Parentheses",
+      "difficulty": "Medium",
+      "topic": "Stack & String",
+      "sourceUrl": "https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/",
+      "description": "Given problem requirements for \"Minimum Remove to Make Valid Parentheses\" (Stack & String). Implement an optimal algorithmic solution.",
+      "starterCode": "function minimumRemovetoMakeValidParentheses(input) {\n  // Write your solution for Minimum Remove to Make Valid Parentheses here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_subarray_sum_equals_k",
+      "title": "Subarray Sum Equals K",
+      "difficulty": "Medium",
+      "topic": "Prefix Sum & Hash Table",
+      "sourceUrl": "https://leetcode.com/problems/subarray-sum-equals-k/",
+      "description": "Given problem requirements for \"Subarray Sum Equals K\" (Prefix Sum & Hash Table). Implement an optimal algorithmic solution.",
+      "starterCode": "function subarraySumEqualsK(input) {\n  // Write your solution for Subarray Sum Equals K here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_binary_tree_right_side_view",
+      "title": "Binary Tree Right Side View",
+      "difficulty": "Medium",
+      "topic": "Tree & BFS",
+      "sourceUrl": "https://leetcode.com/problems/binary-tree-right-side-view/",
+      "description": "Given problem requirements for \"Binary Tree Right Side View\" (Tree & BFS). Implement an optimal algorithmic solution.",
+      "starterCode": "function binaryTreeRightSideView(input) {\n  // Write your solution for Binary Tree Right Side View here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_reverse_linked_list",
+      "title": "Reverse Linked List",
+      "difficulty": "Easy",
+      "topic": "Linked List",
+      "sourceUrl": "https://leetcode.com/problems/reverse-linked-list/",
+      "description": "Given problem requirements for \"Reverse Linked List\" (Linked List). Implement an optimal algorithmic solution.",
+      "starterCode": "function reverseLinkedList(input) {\n  // Write your solution for Reverse Linked List here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_product_of_array_except_self",
+      "title": "Product of Array Except Self",
+      "difficulty": "Medium",
+      "topic": "Array & Prefix Sum",
+      "sourceUrl": "https://leetcode.com/problems/product-of-array-except-self/",
+      "description": "Given problem requirements for \"Product of Array Except Self\" (Array & Prefix Sum). Implement an optimal algorithmic solution.",
+      "starterCode": "function productofArrayExceptSelf(input) {\n  // Write your solution for Product of Array Except Self here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_group_anagrams",
+      "title": "Group Anagrams",
+      "difficulty": "Medium",
+      "topic": "Hash Table & String",
+      "sourceUrl": "https://leetcode.com/problems/group-anagrams/",
+      "description": "Given problem requirements for \"Group Anagrams\" (Hash Table & String). Implement an optimal algorithmic solution.",
+      "starterCode": "function groupAnagrams(input) {\n  // Write your solution for Group Anagrams here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    },
+    {
+      "id": "q_design_underground_system",
+      "title": "Design Underground System",
+      "difficulty": "Medium",
+      "topic": "Design & Hash Table",
+      "sourceUrl": "https://leetcode.com/problems/design-underground-system/",
+      "description": "Given problem requirements for \"Design Underground System\" (Design & Hash Table). Implement an optimal algorithmic solution.",
+      "starterCode": "function designUndergroundSystem(input) {\n  // Write your solution for Design Underground System here\n  return input;\n}",
+      "testCases": [
+        {
+          "input": "Sample Input 1",
+          "expectedOutput": "Expected Output 1"
+        },
+        {
+          "input": "Sample Input 2",
+          "expectedOutput": "Expected Output 2"
+        }
+      ]
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel_google_q_two_sum",
+      "companyId": "google",
+      "companyName": "Google",
+      "questionId": "q_two_sum",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Easy",
+        "topic": "Array & Hash Table",
+        "sourceUrl": "https://leetcode.com/problems/two-sum/"
+      }
+    },
+    {
+      "id": "rel_google_q_longest_substring_without_repeating_characters",
+      "companyId": "google",
+      "companyName": "Google",
+      "questionId": "q_longest_substring_without_repeating_characters",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Sliding Window",
+        "sourceUrl": "https://leetcode.com/problems/longest-substring-without-repeating-characters/"
+      }
+    },
+    {
+      "id": "rel_google_q_median_of_two_sorted_arrays",
+      "companyId": "google",
+      "companyName": "Google",
+      "questionId": "q_median_of_two_sorted_arrays",
+      "timeWindow": "1 Year",
+      "metadata": {
+        "difficulty": "Hard",
+        "topic": "Binary Search",
+        "sourceUrl": "https://leetcode.com/problems/median-of-two-sorted-arrays/"
+      }
+    },
+    {
+      "id": "rel_google_q_container_with_most_water",
+      "companyId": "google",
+      "companyName": "Google",
+      "questionId": "q_container_with_most_water",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Two Pointers",
+        "sourceUrl": "https://leetcode.com/problems/container-with-most-water/"
+      }
+    },
+    {
+      "id": "rel_google_q_word_ladder",
+      "companyId": "google",
+      "companyName": "Google",
+      "questionId": "q_word_ladder",
+      "timeWindow": "2 Years",
+      "metadata": {
+        "difficulty": "Hard",
+        "topic": "Breadth-First Search",
+        "sourceUrl": "https://leetcode.com/problems/word-ladder/"
+      }
+    },
+    {
+      "id": "rel_amazon_q_two_sum",
+      "companyId": "amazon",
+      "companyName": "Amazon",
+      "questionId": "q_two_sum",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Easy",
+        "topic": "Array & Hash Table",
+        "sourceUrl": "https://leetcode.com/problems/two-sum/"
+      }
+    },
+    {
+      "id": "rel_amazon_q_lru_cache",
+      "companyId": "amazon",
+      "companyName": "Amazon",
+      "questionId": "q_lru_cache",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Design & Linked List",
+        "sourceUrl": "https://leetcode.com/problems/lru-cache/"
+      }
+    },
+    {
+      "id": "rel_amazon_q_number_of_islands",
+      "companyId": "amazon",
+      "companyName": "Amazon",
+      "questionId": "q_number_of_islands",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Depth-First Search",
+        "sourceUrl": "https://leetcode.com/problems/number-of-islands/"
+      }
+    },
+    {
+      "id": "rel_amazon_q_trapping_rain_water",
+      "companyId": "amazon",
+      "companyName": "Amazon",
+      "questionId": "q_trapping_rain_water",
+      "timeWindow": "1 Year",
+      "metadata": {
+        "difficulty": "Hard",
+        "topic": "Two Pointers & Stack",
+        "sourceUrl": "https://leetcode.com/problems/trapping-rain-water/"
+      }
+    },
+    {
+      "id": "rel_amazon_q_reorganize_string",
+      "companyId": "amazon",
+      "companyName": "Amazon",
+      "questionId": "q_reorganize_string",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Heap & Greedy",
+        "sourceUrl": "https://leetcode.com/problems/reorganize-string/"
+      }
+    },
+    {
+      "id": "rel_microsoft_q_valid_parentheses",
+      "companyId": "microsoft",
+      "companyName": "Microsoft",
+      "questionId": "q_valid_parentheses",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Easy",
+        "topic": "Stack",
+        "sourceUrl": "https://leetcode.com/problems/valid-parentheses/"
+      }
+    },
+    {
+      "id": "rel_microsoft_q_spiral_matrix",
+      "companyId": "microsoft",
+      "companyName": "Microsoft",
+      "questionId": "q_spiral_matrix",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Matrix",
+        "sourceUrl": "https://leetcode.com/problems/spiral-matrix/"
+      }
+    },
+    {
+      "id": "rel_microsoft_q_search_in_rotated_sorted_array",
+      "companyId": "microsoft",
+      "companyName": "Microsoft",
+      "questionId": "q_search_in_rotated_sorted_array",
+      "timeWindow": "1 Year",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Binary Search",
+        "sourceUrl": "https://leetcode.com/problems/search-in-rotated-sorted-array/"
+      }
+    },
+    {
+      "id": "rel_microsoft_q_serialize_and_deserialize_binary_tree",
+      "companyId": "microsoft",
+      "companyName": "Microsoft",
+      "questionId": "q_serialize_and_deserialize_binary_tree",
+      "timeWindow": "2 Years",
+      "metadata": {
+        "difficulty": "Hard",
+        "topic": "Tree & Design",
+        "sourceUrl": "https://leetcode.com/problems/serialize-and-deserialize-binary-tree/"
+      }
+    },
+    {
+      "id": "rel_meta_q_merge_intervals",
+      "companyId": "meta",
+      "companyName": "Meta",
+      "questionId": "q_merge_intervals",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Sorting & Array",
+        "sourceUrl": "https://leetcode.com/problems/merge-intervals/"
+      }
+    },
+    {
+      "id": "rel_meta_q_minimum_remove_to_make_valid_parentheses",
+      "companyId": "meta",
+      "companyName": "Meta",
+      "questionId": "q_minimum_remove_to_make_valid_parentheses",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Stack & String",
+        "sourceUrl": "https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/"
+      }
+    },
+    {
+      "id": "rel_meta_q_subarray_sum_equals_k",
+      "companyId": "meta",
+      "companyName": "Meta",
+      "questionId": "q_subarray_sum_equals_k",
+      "timeWindow": "1 Year",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Prefix Sum & Hash Table",
+        "sourceUrl": "https://leetcode.com/problems/subarray-sum-equals-k/"
+      }
+    },
+    {
+      "id": "rel_meta_q_binary_tree_right_side_view",
+      "companyId": "meta",
+      "companyName": "Meta",
+      "questionId": "q_binary_tree_right_side_view",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Tree & BFS",
+        "sourceUrl": "https://leetcode.com/problems/binary-tree-right-side-view/"
+      }
+    },
+    {
+      "id": "rel_apple_q_reverse_linked_list",
+      "companyId": "apple",
+      "companyName": "Apple",
+      "questionId": "q_reverse_linked_list",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Easy",
+        "topic": "Linked List",
+        "sourceUrl": "https://leetcode.com/problems/reverse-linked-list/"
+      }
+    },
+    {
+      "id": "rel_apple_q_product_of_array_except_self",
+      "companyId": "apple",
+      "companyName": "Apple",
+      "questionId": "q_product_of_array_except_self",
+      "timeWindow": "6 Months",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Array & Prefix Sum",
+        "sourceUrl": "https://leetcode.com/problems/product-of-array-except-self/"
+      }
+    },
+    {
+      "id": "rel_netflix_q_group_anagrams",
+      "companyId": "netflix",
+      "companyName": "Netflix",
+      "questionId": "q_group_anagrams",
+      "timeWindow": "1 Year",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Hash Table & String",
+        "sourceUrl": "https://leetcode.com/problems/group-anagrams/"
+      }
+    },
+    {
+      "id": "rel_netflix_q_design_underground_system",
+      "companyId": "netflix",
+      "companyName": "Netflix",
+      "questionId": "q_design_underground_system",
+      "timeWindow": "1 Year",
+      "metadata": {
+        "difficulty": "Medium",
+        "topic": "Design & Hash Table",
+        "sourceUrl": "https://leetcode.com/problems/design-underground-system/"
+      }
+    }
+  ]
+}

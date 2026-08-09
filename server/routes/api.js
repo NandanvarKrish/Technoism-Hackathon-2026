@@ -43,6 +43,7 @@ router.post('/ats/analyze', atsController.analyzeAts);
 router.post('/interview/generate', interviewController.generateQuestions);
 router.post('/interview/evaluate', interviewController.evaluateAnswer);
 router.post('/interview/follow-up', interviewController.followUpQuestion);
+router.post('/interview/evaluate-session', interviewController.evaluateSession);
 
 // 5. Company Coding Dataset & Questions
 router.get('/companies', companyController.getCompanies);
@@ -56,6 +57,11 @@ router.post('/coding/submit', codingController.submitCode);
 // 7. Session Persistence
 router.get('/session/:id', sessionController.getSession);
 router.post('/session', sessionController.createSession);
+router.post('/session/:id/resume', sessionController.saveStageResume);
+router.post('/session/:id/ats', sessionController.saveStageAts);
+router.post('/session/:id/interview', sessionController.saveStageInterview);
+router.post('/session/:id/coding', sessionController.saveStageCoding);
+router.post('/session/:id/report', sessionController.saveStageReport);
 
 // 8. Consolidated Report Generator
 router.post('/report/final', reportController.generateFinalReport);

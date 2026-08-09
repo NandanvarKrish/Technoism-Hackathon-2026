@@ -1,101 +1,149 @@
-// Company Coding Dataset Controller
+const fs = require('fs');
+const path = require('path');
 
-const companyQuestionsData = {
-  google: [
-    {
-      id: 'goog_1',
-      title: 'Two Sum & Target Array Search',
-      difficulty: 'Easy',
-      category: 'Data Structures',
-      description: 'Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to target.',
-      starterCode: 'function twoSum(nums, target) {\n  // Write your code here\n  return [];\n}',
-      testCases: [
-        { input: '[2, 7, 11, 15], 9', expectedOutput: '[0, 1]' },
-        { input: '[3, 2, 4], 6', expectedOutput: '[1, 2]' }
-      ]
-    },
-    {
-      id: 'goog_2',
-      title: 'Longest Substring Without Repeating Characters',
-      difficulty: 'Medium',
-      category: 'Sliding Window',
-      description: 'Given a string `s`, find the length of the longest substring without repeating characters.',
-      starterCode: 'function lengthOfLongestSubstring(s) {\n  // Write your code here\n  return 0;\n}',
-      testCases: [
-        { input: '"abcabcbb"', expectedOutput: '3' },
-        { input: '"bbbbb"', expectedOutput: '1' }
-      ]
-    }
-  ],
-  amazon: [
-    {
-      id: 'amzn_1',
-      title: 'Optimal Logistics Warehouse Route',
-      difficulty: 'Medium',
-      category: 'Graphs & BFS',
-      description: 'Find the minimum path cost between distribution centers represented as a grid.',
-      starterCode: 'function minRouteCost(grid) {\n  // Write your code here\n  return 0;\n}',
-      testCases: [
-        { input: '[[1,3,1],[1,5,1],[4,2,1]]', expectedOutput: '7' }
-      ]
-    }
-  ],
-  microsoft: [
-    {
-      id: 'msft_1',
-      title: 'Valid Parentheses & Expression Evaluator',
-      difficulty: 'Easy',
-      category: 'Stacks & Strings',
-      description: 'Determine if an input string containing brackets is valid.',
-      starterCode: 'function isValid(s) {\n  // Write your code here\n  return true;\n}',
-      testCases: [
-        { input: '"()[]{}"', expectedOutput: 'true' },
-        { input: '"(]"', expectedOutput: 'false' }
-      ]
-    }
-  ],
-  meta: [
-    {
-      id: 'meta_1',
-      title: 'Merge K Sorted Intervals',
-      difficulty: 'Hard',
-      category: 'Heaps & Sorting',
-      description: 'Merge overlapping meeting time intervals into non-overlapping blocks.',
-      starterCode: 'function mergeIntervals(intervals) {\n  // Write your code here\n  return [];\n}',
-      testCases: [
-        { input: '[[1,3],[2,6],[8,10],[15,18]]', expectedOutput: '[[1,6],[8,10],[15,18]]' }
-      ]
-    }
-  ]
-};
+let datasetCache = null;
 
-exports.getCompanies = (req, res) => {
-  res.status(200).json({
-    success: true,
-    data: [
-      { id: 'google', name: 'Google', icon: 'fa-brands fa-google', totalQuestions: 2 },
-      { id: 'amazon', name: 'Amazon', icon: 'fa-brands fa-amazon', totalQuestions: 1 },
-      { id: 'microsoft', name: 'Microsoft', icon: 'fa-brands fa-microsoft', totalQuestions: 1 },
-      { id: 'meta', name: 'Meta', icon: 'fa-brands fa-meta', totalQuestions: 1 }
-    ]
-  });
-};
+function loadDataset() {
+  if (datasetCache) return datasetCache;
+  const filePath = path.join(__dirname, '../../data/company-questions-normalized.json');
 
-exports.getCompanyQuestions = (req, res) => {
-  const companyKey = (req.params.company || '').toLowerCase();
-  const questions = companyQuestionsData[companyKey];
-
-  if (!questions) {
-    return res.status(404).json({
-      success: false,
-      error: `No questions found for company: ${req.params.company}`
-    });
+  if (fs.existsSync(filePath)) {
+    try {
+      datasetCache = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      return datasetCache;
+    } catch (e) {
+      console.warn('[companyController] Failed to parse normalized dataset file:', e.message);
+    }
   }
 
-  res.status(200).json({
-    success: true,
-    company: companyKey,
-    count: questions.length,
-    data: questions
-  });
+  // Initial Fallback Data Structure
+  return {
+    companies: [
+      { id: 'google', name: 'Google', questionCount: 5 },
+      { id: 'amazon', name: 'Amazon', questionCount: 5 },
+      { id: 'microsoft', name: 'Microsoft', questionCount: 4 },
+      { id: 'meta', name: 'Meta', questionCount: 4 },
+      { id: 'apple', name: 'Apple', questionCount: 2 },
+      { id: 'netflix', name: 'Netflix', questionCount: 2 }
+    ],
+    questions: [],
+    relations: []
+  };
+}
+
+// Icon Mapping helper
+function getCompanyIcon(companySlug) {
+  switch (companySlug.toLowerCase()) {
+    case 'google': return 'fa-brands fa-google';
+    case 'amazon': return 'fa-brands fa-amazon';
+    case 'microsoft': return 'fa-brands fa-microsoft';
+    case 'meta': return 'fa-brands fa-meta';
+    case 'apple': return 'fa-brands fa-apple';
+    case 'netflix': return 'fa-solid fa-film';
+    default: return 'fa-solid fa-building';
+  }
+}
+
+// GET /api/companies (Support search filter)
+exports.getCompanies = (req, res) => {
+  try {
+    const dataset = loadDataset();
+    const query = (req.query.search || req.query.query || '').toLowerCase().trim();
+
+    let companies = dataset.companies.map(c => ({
+      ...c,
+      icon: getCompanyIcon(c.id),
+      totalQuestions: c.questionCount || 0
+    }));
+
+    if (query) {
+      companies = companies.filter(c => 
+        c.name.toLowerCase().includes(query) || c.id.toLowerCase().includes(query)
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      count: companies.length,
+      data: companies
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch companies: ' + err.message
+    });
+  }
+};
+
+// GET /api/companies/:company/questions (Support difficulty, timeWindow, topic, search filters)
+exports.getCompanyQuestions = (req, res) => {
+  try {
+    const companyKey = (req.params.company || '').toLowerCase().trim();
+    const { difficulty, timeWindow, topic, search } = req.query;
+    const dataset = loadDataset();
+
+    const companyObj = dataset.companies.find(c => c.id.toLowerCase() === companyKey || c.name.toLowerCase() === companyKey);
+    if (!companyObj) {
+      return res.status(404).json({
+        success: false,
+        error: `Company "${req.params.company}" not found.`
+      });
+    }
+
+    // Filter relations for target company
+    let targetRelations = dataset.relations.filter(r => r.companyId.toLowerCase() === companyObj.id.toLowerCase());
+
+    if (timeWindow && timeWindow !== 'All Time') {
+      targetRelations = targetRelations.filter(r => r.timeWindow.toLowerCase() === timeWindow.toLowerCase());
+    }
+
+    let questionMap = {};
+    dataset.questions.forEach(q => { questionMap[q.id] = q; });
+
+    let matchedQuestions = targetRelations.map(rel => {
+      const q = questionMap[rel.questionId] || {};
+      return {
+        id: q.id || rel.questionId,
+        title: q.title || 'Coding Challenge',
+        difficulty: rel.metadata?.difficulty || q.difficulty || 'Medium',
+        topic: rel.metadata?.topic || q.topic || 'Algorithms',
+        timeWindow: rel.timeWindow,
+        sourceUrl: rel.metadata?.sourceUrl || q.sourceUrl || 'https://leetcode.com',
+        description: q.description || '',
+        starterCode: q.starterCode || '',
+        testCases: q.testCases || []
+      };
+    });
+
+    // Apply difficulty filter
+    if (difficulty && difficulty !== 'All') {
+      matchedQuestions = matchedQuestions.filter(q => q.difficulty.toLowerCase() === difficulty.toLowerCase());
+    }
+
+    // Apply topic filter
+    if (topic && topic !== 'All') {
+      matchedQuestions = matchedQuestions.filter(q => q.topic.toLowerCase().includes(topic.toLowerCase()));
+    }
+
+    // Apply search filter
+    if (search) {
+      const sLower = search.toLowerCase();
+      matchedQuestions = matchedQuestions.filter(q => 
+        q.title.toLowerCase().includes(sLower) || q.topic.toLowerCase().includes(sLower)
+      );
+    }
+
+    res.status(200).json({
+      success: true,
+      company: companyObj.name,
+      companyId: companyObj.id,
+      count: matchedQuestions.length,
+      data: matchedQuestions
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: 'Failed to fetch company questions: ' + err.message
+    });
+  }
 };

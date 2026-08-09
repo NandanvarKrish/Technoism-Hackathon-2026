@@ -324,44 +324,31 @@ window.AiService = {
       console.warn('Backend API connection notice (falling back to local question engine):', apiErr.message);
     }
 
-    // 2. Deterministic Local Fallback Engine
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        try {
-          const categoryKey = this.matchRoleToFallbackCategory(targetRole);
-          const fallbackPool = this.fallbackQuestionDatabase[categoryKey] || this.fallbackQuestionDatabase['fresher-hr'];
+    // 2. Local Fallback Engine (Immediate Execution)
+    try {
+      const categoryKey = this.matchRoleToFallbackCategory(targetRole);
+      const fallbackPool = this.fallbackQuestionDatabase[categoryKey] || this.fallbackQuestionDatabase['fresher-hr'];
 
-          const tailoredQuestions = fallbackPool.slice(0, count).map((item, idx) => {
-            let text = item.question;
-            if (idx === 0) {
-              text = `Based on your resume and interest in ${targetRole || 'the role'}, how does your academic or project background prepare you for this position?`;
-            } else if (idx === 1 && jobDescription) {
-              text = `The job description mentions key requirements like technical problem solving and teamwork. Can you share an example of how you applied these skills in a past project?`;
-            }
-            return {
-              id: `q_${Date.now()}_${idx + 1}`,
-              question: text,
-              difficulty: item.difficulty,
-              focus: item.focus
-            };
-          });
-
-          const responseObj = { questions: tailoredQuestions };
-
-          if (this.validateQuestionSchema(responseObj)) {
-            resolve(responseObj.questions);
-          } else {
-            if (!isRetry) {
-              resolve(this.executeQuestionGenerationRequest(targetRole, jobDescription, resumeText, count, true));
-            } else {
-              reject(new Error('AI generated question schema validation failed after retry.'));
-            }
-          }
-        } catch (e) {
-          reject(e);
+      const tailoredQuestions = fallbackPool.slice(0, count).map((item, idx) => {
+        let text = item.question;
+        if (idx === 0) {
+          text = `Based on your resume and interest in ${targetRole || 'the role'}, how does your academic or project background prepare you for this position?`;
+        } else if (idx === 1 && jobDescription) {
+          text = `The job description mentions key requirements like technical problem solving and teamwork. Can you share an example of how you applied these skills in a past project?`;
         }
-      }, 400);
-    });
+        return {
+          id: `q_${Date.now()}_${idx + 1}`,
+          question: text,
+          difficulty: item.difficulty,
+          focus: item.focus
+        };
+      });
+
+      return tailoredQuestions;
+    } catch (e) {
+      console.error('Fallback question generation error:', e.message);
+      return [];
+    }
   },
 
   // Perform Semantic AI Resume ATS Analysis (100% Resume-Driven)
@@ -447,31 +434,13 @@ window.AiService = {
   },
 
   async executeAiRequestWithRetry(resumeText, jobDescription, targetRole, fallbackData, isRetry = false) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        try {
-          const result = {
-            ...fallbackData,
-            aiEnhanced: false,
-            isFallback: true,
-            source: 'Deterministic Fallback Analysis (API Offline)',
-            semanticSummary: `Deterministic ATS matching completed for ${targetRole}. Connect GEMINI_API_KEY for live AI semantic evaluation.`
-          };
-
-          if (this.validateAtsSchema(result)) {
-            resolve(result);
-          } else {
-            if (!isRetry) {
-              resolve(this.executeAiRequestWithRetry(resumeText, jobDescription, targetRole, fallbackData, true));
-            } else {
-              reject(new Error('ATS response failed schema validation after retry.'));
-            }
-          }
-        } catch (e) {
-          reject(e);
-        }
-      }, 300);
-    });
+    return {
+      ...fallbackData,
+      aiEnhanced: false,
+      isFallback: true,
+      source: 'Deterministic Fallback Analysis (API Offline)',
+      semanticSummary: `Deterministic ATS matching completed for ${targetRole}. Connect GEMINI_API_KEY for live AI semantic evaluation.`
+    };
   },
 
   validateAtsSchema(obj) {
@@ -538,27 +507,10 @@ window.AiService = {
       console.warn('Backend API Answer Evaluation notice (using local rubric):', apiErr.message);
     }
 
-    // 2. Local Fallback Engine
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        try {
-          const evalResult = this.evaluateLocalRubric(questionObj, candidateAnswer, targetRole, resumeText, jobDescription);
-          evalResult.aiEvaluated = true;
-
-          if (this.validateAnswerEvaluationSchema(evalResult)) {
-            resolve(evalResult);
-          } else {
-            if (!isRetry) {
-              resolve(this.executeAnswerEvaluationRequest(questionObj, candidateAnswer, targetRole, resumeText, jobDescription, true));
-            } else {
-              reject(new Error('AI evaluation schema validation failed after retry.'));
-            }
-          }
-        } catch (e) {
-          reject(e);
-        }
-      }, 400);
-    });
+    // 2. Immediate Local Fallback Evaluation
+    const evalResult = this.evaluateLocalRubric(questionObj, candidateAnswer, targetRole, resumeText, jobDescription);
+    evalResult.aiEvaluated = true;
+    return evalResult;
   },
 
   // Fallback Local Rubric Evaluator (Deterministic & Reliable)

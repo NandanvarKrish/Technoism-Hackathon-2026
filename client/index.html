@@ -474,19 +474,23 @@
           <p class="ui-text" style="color:var(--color-text-muted)" id="report-target-role-label">Consolidated ATS screening and AI mock interview readiness assessment.</p>
         </div>
 
-        <!-- Score Overview Grid -->
-        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:1.5rem; text-align:center; margin-bottom:2rem;">
-          <div style="background:var(--color-pale-aqua); padding:1.5rem; border-radius:var(--radius-md); border:1px solid rgba(41,54,129,0.1);">
-            <div class="score-number" id="final-ats-score" style="font-size:2.5rem;">--</div>
-            <div class="score-label">ATS RESUME FIT</div>
+        <!-- Three-Stage Score Overview Grid -->
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:1.25rem; text-align:center; margin-bottom:2rem;">
+          <div style="background:var(--color-pale-aqua); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(41,54,129,0.1);">
+            <div class="score-number" id="final-ats-score" style="font-size:2.2rem;">--</div>
+            <div class="score-label">ATS RESUME FIT (30%)</div>
           </div>
-          <div style="background:rgba(66, 116, 217, 0.1); padding:1.5rem; border-radius:var(--radius-md); border:1px solid rgba(66,116,217,0.2);">
-            <div class="score-number" id="final-interview-score" style="font-size:2.5rem; color:var(--color-action-blue);">--</div>
-            <div class="score-label">MOCK INTERVIEW</div>
+          <div style="background:rgba(66, 116, 217, 0.1); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(66,116,217,0.2);">
+            <div class="score-number" id="final-interview-score" style="font-size:2.2rem; color:var(--color-action-blue);">--</div>
+            <div class="score-label">GENERAL INTERVIEW (35%)</div>
           </div>
-          <div style="background:linear-gradient(135deg, var(--color-deep-blue), var(--color-action-blue)); color:white; padding:1.5rem; border-radius:var(--radius-md); box-shadow:var(--shadow-md);">
-            <div class="score-number" id="final-readiness-score" style="font-size:2.5rem; color:white;">--</div>
-            <div class="score-label" style="color:rgba(255,255,255,0.85);" id="final-readiness-level">OVERALL READINESS</div>
+          <div style="background:rgba(16, 185, 129, 0.1); padding:1.25rem; border-radius:var(--radius-md); border:1px solid rgba(16,185,129,0.2);">
+            <div class="score-number" id="final-coding-score" style="font-size:2.2rem; color:var(--color-success);">--</div>
+            <div class="score-label">COMPANY CODING (35%)</div>
+          </div>
+          <div style="background:linear-gradient(135deg, var(--color-deep-blue), var(--color-action-blue)); color:white; padding:1.25rem; border-radius:var(--radius-md); box-shadow:var(--shadow-md);">
+            <div class="score-number" id="final-readiness-score" style="font-size:2.2rem; color:white;">--</div>
+            <div class="score-label" style="color:rgba(255,255,255,0.85);" id="final-readiness-level">OVERALL PREPARATION</div>
           </div>
         </div>
 

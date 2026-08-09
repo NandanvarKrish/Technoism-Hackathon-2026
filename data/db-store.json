@@ -1,0 +1,498 @@
+{
+  "sessions": {
+    "sess_1786269924047_cux6pe": {
+      "id": "sess_1786269924047_cux6pe",
+      "user_id": "anonymous_candidate",
+      "resumeCompleted": true,
+      "atsCompleted": true,
+      "generalInterviewCompleted": true,
+      "codingRoundStarted": true,
+      "codingRoundCompleted": true,
+      "finalReportAvailable": true,
+      "created_at": "2026-08-09T10:05:24.051Z",
+      "userId": "anonymous_candidate",
+      "candidateName": "Nandan Shah",
+      "targetRole": "Full-Stack & Frontend Developer",
+      "updated_at": "2026-08-09T10:05:24.068Z"
+    },
+    "sess_1786269969603_6hyaug": {
+      "id": "sess_1786269969603_6hyaug",
+      "user_id": "anonymous_candidate",
+      "resumeCompleted": true,
+      "atsCompleted": true,
+      "generalInterviewCompleted": true,
+      "codingRoundStarted": true,
+      "codingRoundCompleted": true,
+      "finalReportAvailable": true,
+      "created_at": "2026-08-09T10:06:09.603Z",
+      "userId": "anonymous_candidate",
+      "candidateName": "Nandan Shah",
+      "targetRole": "Full-Stack & Frontend Developer",
+      "updated_at": "2026-08-09T10:06:09.621Z"
+    },
+    "sess_1786270257576_04tp9k": {
+      "id": "sess_1786270257576_04tp9k",
+      "user_id": "anonymous_candidate",
+      "resumeCompleted": true,
+      "atsCompleted": true,
+      "generalInterviewCompleted": true,
+      "codingRoundStarted": true,
+      "codingRoundCompleted": true,
+      "finalReportAvailable": true,
+      "created_at": "2026-08-09T10:10:57.577Z",
+      "userId": "anonymous_candidate",
+      "candidateName": "Nandan Shah",
+      "targetRole": "Full-Stack Developer",
+      "updated_at": "2026-08-09T10:10:57.613Z"
+    }
+  },
+  "resumes": {
+    "sess_1786269924047_cux6pe": {
+      "id": "res_1786269924058",
+      "session_id": "sess_1786269924047_cux6pe",
+      "file_name": "nandan_shah_resume.pdf",
+      "file_type": "pdf",
+      "extracted_text": "NANDAN SHAH Full-Stack & Frontend Developer JavaScript React Node.js SQL",
+      "char_count": 72,
+      "word_count": 10,
+      "created_at": "2026-08-09T10:05:24.058Z"
+    },
+    "sess_1786269969603_6hyaug": {
+      "id": "res_1786269969610",
+      "session_id": "sess_1786269969603_6hyaug",
+      "file_name": "nandan_shah_resume.pdf",
+      "file_type": "pdf",
+      "extracted_text": "NANDAN SHAH Full-Stack & Frontend Developer JavaScript React Node.js SQL",
+      "char_count": 72,
+      "word_count": 10,
+      "created_at": "2026-08-09T10:06:09.610Z"
+    },
+    "sess_1786270257576_04tp9k": {
+      "id": "res_1786270257586",
+      "session_id": "sess_1786270257576_04tp9k",
+      "file_name": "nandan_resume.pdf",
+      "file_type": "pdf",
+      "extracted_text": "NANDAN SHAH\nFull-Stack & Frontend Developer\nEmail: nandan@example.com | GitHub: github.com/nandan\n\nPROFESSIONAL SUMMARY\nPassionate Full-Stack Developer with 3+ years of experience building high-performance web applications using JavaScript, React, Node.js, Express, PostgreSQL, and REST APIs.\n\nSKILLS\n- Languages: JavaScript, Python, SQL, HTML5, CSS3\n- Frontend: React, Redux, Next.js, Webpack\n- Backend: Node.js, Express, RESTful APIs, Microservices\n- Databases: PostgreSQL, Supabase, MongoDB, Redis\n\nPROJECTS\nTech Titans AI Platform — Built a full-stack candidate preparation platform using React, Node.js, and Gemini 2.5 Flash API.\n- Implemented real-time ATS analysis, automated role detection, personalized mock interviews, and isolated sandbox code execution.",
+      "char_count": 765,
+      "word_count": 97,
+      "created_at": "2026-08-09T10:10:57.586Z"
+    }
+  },
+  "candidateProfiles": {
+    "sess_1786269924047_cux6pe": {
+      "id": "prof_1786269924059",
+      "session_id": "sess_1786269924047_cux6pe",
+      "name": "Nandan Shah",
+      "detectedRole": "Full-Stack & Frontend Developer",
+      "skills": [
+        "JavaScript",
+        "React",
+        "Node.js"
+      ],
+      "created_at": "2026-08-09T10:05:24.059Z"
+    },
+    "sess_1786269969603_6hyaug": {
+      "id": "prof_1786269969611",
+      "session_id": "sess_1786269969603_6hyaug",
+      "name": "Nandan Shah",
+      "headline": "",
+      "detectedRole": "Full-Stack & Frontend Developer",
+      "detected_role": "Full-Stack & Frontend Developer",
+      "skills": [
+        "JavaScript",
+        "React",
+        "Node.js"
+      ],
+      "projects": [],
+      "experience": [],
+      "education": [],
+      "achievements": [],
+      "created_at": "2026-08-09T10:06:09.611Z"
+    },
+    "sess_1786270257576_04tp9k": {
+      "id": "prof_1786270257587",
+      "session_id": "sess_1786270257576_04tp9k",
+      "name": "Nandan Shah",
+      "headline": "",
+      "detectedRole": "Full-Stack Developer",
+      "detected_role": "Full-Stack Developer",
+      "skills": [
+        "JavaScript",
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "Python"
+      ],
+      "projects": [],
+      "experience": [],
+      "education": [],
+      "achievements": [],
+      "created_at": "2026-08-09T10:10:57.587Z"
+    }
+  },
+  "jobDescriptions": {},
+  "atsAnalyses": {
+    "sess_1786269924047_cux6pe": {
+      "id": "ats_1786269924061",
+      "session_id": "sess_1786269924047_cux6pe",
+      "overallScore": 82,
+      "targetRole": "Full-Stack & Frontend Developer",
+      "source": "Gemini 2.5 Flash AI",
+      "created_at": "2026-08-09T10:05:24.061Z"
+    },
+    "sess_1786269969603_6hyaug": {
+      "id": "ats_1786269969613",
+      "session_id": "sess_1786269969603_6hyaug",
+      "overallScore": 82,
+      "overall_score": 82,
+      "score": 82,
+      "categoryScores": {},
+      "categories": [],
+      "matchedSkills": [],
+      "partialMatches": [],
+      "missingSkills": [],
+      "strengths": [],
+      "weaknesses": [],
+      "recommendations": [],
+      "summary": "",
+      "source": "Gemini 2.5 Flash AI",
+      "created_at": "2026-08-09T10:06:09.613Z"
+    },
+    "sess_1786270257576_04tp9k": {
+      "id": "ats_1786270257591",
+      "session_id": "sess_1786270257576_04tp9k",
+      "overallScore": 59,
+      "overall_score": 59,
+      "score": 59,
+      "categoryScores": {
+        "resumeStructure": 85,
+        "technicalSkills": 62,
+        "projects": 45,
+        "experience": 40,
+        "education": 70,
+        "achievements": 70,
+        "impact": 65,
+        "roleReadiness": 54
+      },
+      "categories": [
+        {
+          "name": "Resume Structure",
+          "weight": "15%",
+          "score": 85,
+          "weightedScore": 13,
+          "explanation": "Section organization, contact details, and formatting."
+        },
+        {
+          "name": "Technical Skills",
+          "weight": "20%",
+          "score": 62,
+          "weightedScore": 12,
+          "explanation": "Breadth and depth of programming languages, frameworks, and developer tools."
+        },
+        {
+          "name": "Projects",
+          "weight": "20%",
+          "score": 45,
+          "weightedScore": 9,
+          "explanation": "Substantive project execution and technical complexity."
+        },
+        {
+          "name": "Experience & Internships",
+          "weight": "15%",
+          "score": 40,
+          "weightedScore": 6,
+          "explanation": "Practical industry work or internship evidence."
+        },
+        {
+          "name": "Education",
+          "weight": "10%",
+          "score": 70,
+          "weightedScore": 7,
+          "explanation": "Degree relevance and academic background."
+        },
+        {
+          "name": "Achievements & Impact",
+          "weight": "10%",
+          "score": 65,
+          "weightedScore": 7,
+          "explanation": "Quantifiable metrics and accomplishment evidence."
+        },
+        {
+          "name": "Role Readiness",
+          "weight": "10%",
+          "score": 54,
+          "weightedScore": 5,
+          "explanation": "Overall career readiness for target professional domain."
+        }
+      ],
+      "matchedSkills": [
+        "JavaScript",
+        "React",
+        "Node.js"
+      ],
+      "partialMatches": [
+        "TypeScript",
+        "Unit Testing"
+      ],
+      "missingSkills": [
+        "Cloud Infrastructure (AWS/Docker)",
+        "Quantifiable percentage impact metrics"
+      ],
+      "strengths": [
+        "Strong technical foundation in JavaScript, React, Node.js.",
+        "Demonstrated project work in modern application development."
+      ],
+      "weaknesses": [
+        "Incorporate quantifiable metric outcomes (% improvements, latency reductions) in project bullets."
+      ],
+      "recommendations": [
+        "Add quantifiable metrics for all completed projects.",
+        "Highlight specific technical contribution details."
+      ],
+      "summary": "ATS Analysis completed for Full-Stack Developer. Candidate exhibits solid technical foundation.",
+      "source": "Deterministic Resume ATS Engine (API Offline)",
+      "created_at": "2026-08-09T10:10:57.591Z"
+    }
+  },
+  "interviews": {
+    "sess_1786269924047_cux6pe": {
+      "id": "int_1786269924063",
+      "session_id": "sess_1786269924047_cux6pe",
+      "targetRole": "Full-Stack & Frontend Developer",
+      "total_questions": 1,
+      "created_at": "2026-08-09T10:05:24.063Z"
+    },
+    "sess_1786269969603_6hyaug": {
+      "id": "int_1786269969616",
+      "session_id": "sess_1786269969603_6hyaug",
+      "target_role": "Full-Stack & Frontend Developer",
+      "targetRole": "Full-Stack & Frontend Developer",
+      "status": "active",
+      "total_questions": 1,
+      "created_at": "2026-08-09T10:06:09.616Z"
+    },
+    "sess_1786270257576_04tp9k": {
+      "id": "int_1786270257600",
+      "session_id": "sess_1786270257576_04tp9k",
+      "target_role": "Full-Stack Developer",
+      "targetRole": "Full-Stack Developer",
+      "status": "active",
+      "total_questions": 2,
+      "created_at": "2026-08-09T10:10:57.600Z"
+    }
+  },
+  "interviewQuestions": {
+    "sess_1786269924047_cux6pe": [
+      {
+        "id": "q1",
+        "question": "How did you build your project?"
+      }
+    ],
+    "sess_1786269969603_6hyaug": [
+      {
+        "id": "q1",
+        "question": "How did you build your project?"
+      }
+    ],
+    "sess_1786270257576_04tp9k": [
+      {
+        "id": "q_1786270257594_1",
+        "question": "Your resume highlights building \"your primary engineering project\" using JavaScript, React, Node.js. How did you approach component architecture and state management for this project?",
+        "type": "project-specific",
+        "difficulty": "Medium",
+        "focus": "Project Architecture & Design",
+        "sourceEvidence": "Candidate project \"your primary engineering project\" with JavaScript, React",
+        "isFallback": true
+      },
+      {
+        "id": "q_1786270257594_2",
+        "question": "Your ATS audit noted opportunities to improve Incorporate quantifiable metric outcomes (% improvements, latency reductions) in project bullets.. How do you measure, benchmark, and optimize technical performance in production?",
+        "type": "technical",
+        "difficulty": "Medium",
+        "focus": "Performance & Engineering Metrics",
+        "sourceEvidence": "ATS Audit weakness insight: Incorporate quantifiable metric outcomes (% improvements, latency reductions) in project bullets.",
+        "isFallback": true
+      }
+    ]
+  },
+  "interviewAnswers": {
+    "sess_1786269924047_cux6pe": [
+      {
+        "questionId": "q1",
+        "candidateAnswer": "I used React and Node.js."
+      }
+    ],
+    "sess_1786269969603_6hyaug": [
+      {
+        "questionId": "q1",
+        "candidateAnswer": "I used React and Node.js."
+      }
+    ],
+    "sess_1786270257576_04tp9k": []
+  },
+  "interviewEvaluations": {
+    "sess_1786269924047_cux6pe": [
+      {
+        "score": 85,
+        "technicalAccuracy": 88
+      }
+    ],
+    "sess_1786269969603_6hyaug": [
+      {
+        "score": 85,
+        "technicalAccuracy": 88
+      }
+    ],
+    "sess_1786270257576_04tp9k": [
+      {
+        "score": 87,
+        "relevance": 90,
+        "clarity": 85,
+        "structure": 85,
+        "technicalAccuracy": 85,
+        "whatCandidateSaid": "\"In my recent project, I built a microservices backend using Node.js and Express with PostgreSQL connection pooling.\"",
+        "strengths": [
+          "Clear technical response directly addressing the question topic.",
+          "Demonstrated role-relevant domain understanding."
+        ],
+        "improvements": [
+          "Incorporate specific metrics or percentage improvements.",
+          "Structure response with clear problem context and technical solution steps."
+        ],
+        "nextTip": "Strong answer! Highlight quantitative team contributions in subsequent questions.",
+        "followUpNeeded": true,
+        "followUpReason": "Probing deeper into technical implementation details.",
+        "source": "Semantic Local Engine (API Offline)",
+        "isFallback": true
+      }
+    ]
+  },
+  "codingSessions": {
+    "sess_1786269924047_cux6pe": {
+      "id": "code_1786269924066",
+      "session_id": "sess_1786269924047_cux6pe",
+      "company_id": "google",
+      "question_id": "goog_1",
+      "started_at": "2026-08-09T10:05:24.066Z"
+    },
+    "sess_1786269969603_6hyaug": {
+      "id": "code_1786269969619",
+      "session_id": "sess_1786269969603_6hyaug",
+      "company_id": "google",
+      "companyId": "google",
+      "question_id": "goog_1",
+      "questionId": "goog_1",
+      "started_at": "2026-08-09T10:06:09.619Z"
+    },
+    "sess_1786270257576_04tp9k": {
+      "id": "code_1786270257610",
+      "session_id": "sess_1786270257576_04tp9k",
+      "company_id": "google",
+      "companyId": "google",
+      "question_id": "q_two_sum",
+      "questionId": "q_two_sum",
+      "started_at": "2026-08-09T10:10:57.610Z"
+    }
+  },
+  "codingSubmissions": {
+    "sess_1786269924047_cux6pe": [
+      {
+        "id": "sub_1786269924066",
+        "coding_session_id": "code_1786269924066",
+        "sourceCode": "function solution() { return true; }",
+        "status": "Accepted",
+        "score": 95,
+        "created_at": "2026-08-09T10:05:24.066Z"
+      }
+    ],
+    "sess_1786269969603_6hyaug": [
+      {
+        "id": "sub_1786269969619",
+        "coding_session_id": "code_1786269969619",
+        "sourceCode": "function solution() { return true; }",
+        "status": "Accepted",
+        "score": 95,
+        "created_at": "2026-08-09T10:06:09.619Z"
+      }
+    ],
+    "sess_1786270257576_04tp9k": [
+      {
+        "id": "sub_1786270257610",
+        "coding_session_id": "code_1786270257610",
+        "submissionId": "sub_1786270257609",
+        "sessionId": "sess_1786270257576_04tp9k",
+        "sourceCode": "function twoSum(nums, target) { return [0, 1]; }",
+        "language": "javascript",
+        "attempts": 1,
+        "status": "Accepted",
+        "passedCount": 2,
+        "totalCount": 2,
+        "executionTimeMs": 1,
+        "score": 95,
+        "complexity": {
+          "time": "O(N)",
+          "space": "O(1)"
+        },
+        "feedback": "Optimal solution! Passed all test cases with clean memory performance.",
+        "timestamp": "2026-08-09T10:10:57.609Z",
+        "created_at": "2026-08-09T10:10:57.610Z"
+      }
+    ]
+  },
+  "codingResults": {},
+  "finalReports": {
+    "sess_1786269924047_cux6pe": {
+      "id": "rep_1786269924068",
+      "session_id": "sess_1786269924047_cux6pe",
+      "atsScore": 82,
+      "interviewScore": 85,
+      "codingScore": 95,
+      "readinessScore": 87,
+      "readinessLevel": "Strong Fit",
+      "created_at": "2026-08-09T10:05:24.068Z"
+    },
+    "sess_1786269969603_6hyaug": {
+      "id": "rep_1786269969621",
+      "session_id": "sess_1786269969603_6hyaug",
+      "atsScore": 82,
+      "interviewScore": 85,
+      "codingScore": 95,
+      "readinessScore": 87,
+      "readiness_score": 87,
+      "readinessLevel": "Strong Fit",
+      "readiness_level": "Strong Fit",
+      "strengths": [],
+      "gaps": [],
+      "nextActions": [],
+      "created_at": "2026-08-09T10:06:09.621Z"
+    },
+    "sess_1786270257576_04tp9k": {
+      "id": "rep_1786270257613",
+      "session_id": "sess_1786270257576_04tp9k",
+      "atsScore": 59,
+      "interviewScore": 70,
+      "codingScore": 95,
+      "readinessScore": 75,
+      "readiness_score": 75,
+      "readinessLevel": "Job Ready / Solid Candidate Fit",
+      "readiness_level": "Job Ready / Solid Candidate Fit",
+      "strengths": [
+        "Strong technical foundation in JavaScript, React, Node.js.",
+        "Demonstrated project work in modern application development.",
+        "Interview strength: Technical System Architecture",
+        "Interview strength: Clear Communication",
+        "Coding algorithmic efficiency (O(N) time complexity)"
+      ],
+      "gaps": [
+        "Incorporate quantifiable metric outcomes (% improvements, latency reductions) in project bullets.",
+        "Interview weakness: Quantifiable Metric Evidence"
+      ],
+      "nextActions": [
+        "Incorporate explicit resume project bullets for missing skills: Cloud Infrastructure (AWS/Docker), Quantifiable percentage impact metrics.",
+        "Refine technical communication and STAR structure for: Quantifiable Metric Evidence.",
+        "Maintain optimal O(N) space/time performance in live technical screenings."
+      ],
+      "created_at": "2026-08-09T10:10:57.613Z"
+    }
+  }
+}
