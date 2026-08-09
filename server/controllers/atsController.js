@@ -1,16 +1,16 @@
 const https = require('https');
 
-// Validate Gemini Resume ATS Response Schema
-function validateGeminiResumeAtsResponse(obj) {
+// Validate Gemini ATS Output Schema
+function validateGeminiAtsResponse(obj) {
   if (!obj || typeof obj !== 'object') return false;
 
-  const score = obj.overallScore || obj.score;
+  const score = obj.score !== undefined ? obj.score : obj.overallScore;
   if (typeof score !== 'number' || score < 0 || score > 100) return false;
 
-  if (!obj.categoryScores || typeof obj.categoryScores !== 'object') return false;
+  if (!Array.isArray(obj.matchedSkills)) return false;
+  if (!Array.isArray(obj.missingSkills) && !Array.isArray(obj.weaknesses)) return false;
   if (!Array.isArray(obj.strengths)) return false;
-  if (!Array.isArray(obj.weaknesses) && !Array.isArray(obj.missingSkills)) return false;
-  if (!Array.isArray(obj.recommendations) && !Array.isArray(obj.suggestions)) return false;
+  if (!Array.isArray(obj.suggestions) && !Array.isArray(obj.recommendations)) return false;
 
   return true;
 }
@@ -68,8 +68,8 @@ function callGeminiApi(apiKey, prompt) {
   });
 }
 
-// Deterministic Resume Readiness Fallback Engine
-function evaluateDeterministicResumeAts(resumeText, candidateProfile) {
+// Deterministic Local ATS Fallback Evaluator (Explicitly labeled as API Offline Fallback)
+function evaluateDeterministicAts(resumeText, candidateProfile, targetRole, jobDescription) {
   const textLower = (resumeText || '').toLowerCase();
   const profile = candidateProfile || {};
 
@@ -78,7 +78,7 @@ function evaluateDeterministicResumeAts(resumeText, candidateProfile) {
   const experience = profile.experience || [];
   const education = profile.education || [];
 
-  const headline = profile.detectedRole || profile.headline || 'Software Engineering Candidate';
+  const roleTitle = targetRole || profile.detectedRole || 'Software Engineering Candidate';
 
   let structScore = 85;
   if (profile.name && profile.email) structScore += 5;
@@ -115,41 +115,45 @@ function evaluateDeterministicResumeAts(resumeText, candidateProfile) {
   );
 
   const categories = [
-    { name: 'Resume Structure', weight: '15%', score: categoryScores.resumeStructure, weightedScore: Math.round(categoryScores.resumeStructure * 0.15), explanation: 'Section organization, contact details, and layout readability.' },
-    { name: 'Technical Skills', weight: '20%', score: categoryScores.technicalSkills, weightedScore: Math.round(categoryScores.technicalSkills * 0.20), explanation: 'Breadth and depth of programming languages, frameworks, and tools.' },
+    { name: 'Resume Structure', weight: '15%', score: categoryScores.resumeStructure, weightedScore: Math.round(categoryScores.resumeStructure * 0.15), explanation: 'Section organization, contact details, and formatting.' },
+    { name: 'Technical Skills', weight: '20%', score: categoryScores.technicalSkills, weightedScore: Math.round(categoryScores.technicalSkills * 0.20), explanation: 'Breadth and depth of programming languages, frameworks, and developer tools.' },
     { name: 'Projects', weight: '20%', score: categoryScores.projects, weightedScore: Math.round(categoryScores.projects * 0.20), explanation: 'Substantive project execution and technical complexity.' },
     { name: 'Experience & Internships', weight: '15%', score: categoryScores.experience, weightedScore: Math.round(categoryScores.experience * 0.15), explanation: 'Practical industry work or internship evidence.' },
-    { name: 'Education', weight: '10%', score: categoryScores.education, weightedScore: Math.round(categoryScores.education * 0.10), explanation: 'Degree alignment and academic background.' },
+    { name: 'Education', weight: '10%', score: categoryScores.education, weightedScore: Math.round(categoryScores.education * 0.10), explanation: 'Degree relevance and academic background.' },
     { name: 'Achievements & Impact', weight: '10%', score: categoryScores.impact, weightedScore: Math.round(categoryScores.impact * 0.10), explanation: 'Quantifiable metrics and accomplishment evidence.' },
     { name: 'Role Readiness', weight: '10%', score: categoryScores.roleReadiness, weightedScore: Math.round(categoryScores.roleReadiness * 0.10), explanation: 'Overall career readiness for target professional domain.' }
   ];
 
   return {
-    overallScore,
     score: overallScore,
+    overallScore,
     matchScore: overallScore,
-    targetRole: headline,
-    detectedRoles: [headline],
+    targetRole: roleTitle,
+    detectedRoles: [roleTitle],
     categoryScores,
     categories,
+    matchedSkills: skills,
+    partialMatches: ['TypeScript', 'Unit Testing'],
+    missingSkills: ['Cloud Infrastructure (AWS/Docker)', 'Quantifiable percentage impact metrics'],
     strengths: [
-      `Strong technical foundation in ${skills.slice(0, 4).join(', ') || 'core software engineering'}.`,
+      `Strong technical foundation in ${skills.slice(0, 4).join(', ') || 'software engineering'}.`,
       `Demonstrated project work in ${projects.map(p => p.name).join(', ') || 'modern application development'}.`
     ],
     weaknesses: [
-      'Incorporate more quantitative metric results (% improvements, latency reductions) in experience bullets.'
+      'Incorporate quantifiable metric outcomes (% improvements, latency reductions) in project bullets.'
     ],
-    missingElements: [
-      'Explicit certifications or cloud deployment project highlights.'
+    suggestions: [
+      'Add quantifiable metrics for all completed projects.',
+      'Highlight specific technical contribution details.'
     ],
     recommendations: [
-      'Add quantifiable metric outcomes for all completed projects.',
-      'Highlight specific leadership and technical contribution details.'
+      'Add quantifiable metrics for all completed projects.',
+      'Highlight specific technical contribution details.'
     ],
+    evidence: projects.length > 0 ? [`Developed ${projects[0].name}`] : ['Demonstrated software development background'],
     detectedSkills: skills,
-    projectInsights: projects.map(p => `Project "${p.name}": evaluates core practical skills.`),
-    experienceInsights: experience.map(e => `Role "${e.title}": evaluates industry readiness.`),
-    summary: `Resume ATS Analysis completed for ${headline}. Candidate exhibits a solid foundation with clear project evidence.`,
+    semanticSummary: `ATS Analysis completed for ${roleTitle}. Candidate exhibits solid technical foundation.`,
+    summary: `ATS Analysis completed for ${roleTitle}. Candidate exhibits solid technical foundation.`,
     aiEnhanced: false,
     isFallback: true,
     source: 'Deterministic Resume ATS Engine (API Offline)'
@@ -158,7 +162,7 @@ function evaluateDeterministicResumeAts(resumeText, candidateProfile) {
 
 exports.analyzeAts = async (req, res) => {
   try {
-    const { resumeText, candidateProfile } = req.body;
+    const { resumeText, candidateProfile, targetRole, jobDescription } = req.body;
 
     if (!resumeText || resumeText.trim().length < 15) {
       return res.status(400).json({
@@ -169,21 +173,25 @@ exports.analyzeAts = async (req, res) => {
 
     const apiKey = process.env.GEMINI_API_KEY;
 
-    // 1. If GEMINI_API_KEY is present, perform live Gemini AI Resume ATS Analysis
+    // 1. If GEMINI_API_KEY is present, perform live Gemini AI ATS Analysis
     if (apiKey && apiKey.trim().length > 10) {
       try {
-        const prompt = `You are an expert Resume ATS Evaluator & Career Readiness Auditor.
-Analyze the candidate's Resume Text and Candidate Profile JSON.
-Do NOT look for a job description. Perform an independent, rigorous ATS Readiness evaluation of the resume itself.
+        const prompt = `You are an expert ATS (Applicant Tracking System) Screener & Talent Evaluator.
+Analyze the candidate's Resume Text and Candidate Profile JSON against the target role requirements.
 
-EVALUATION CRITERIA:
-1. Resume Structure & Completeness (15%)
-2. Technical Skills & Diversity (20%)
-3. Project Quality & Technical Depth (20%)
-4. Practical Experience & Internships (15%)
-5. Education Alignment (10%)
-6. Achievements & Quantifiable Impact (10%)
-7. Overall Role Readiness (10%)
+EVALUATION TASK:
+Analyze:
+1. Required skills
+2. Preferred skills
+3. Tools & Technologies
+4. Experience requirements
+5. Education requirements
+6. Responsibilities
+7. Resume evidence
+8. Missing requirements
+9. Partial matches
+10. Strengths
+11. Recommendations
 
 CANDIDATE RESUME TEXT:
 ${resumeText}
@@ -191,28 +199,32 @@ ${resumeText}
 CANDIDATE PROFILE JSON:
 ${JSON.stringify(candidateProfile || {})}
 
+TARGET ROLE:
+${targetRole || candidateProfile?.detectedRole || 'Software Development Engineer'}
+
+JOB DESCRIPTION:
+${jobDescription || 'Standard requirements for candidate professional domain'}
+
 Return ONLY a JSON object matching this exact schema:
 {
-  "overallScore": 85,
-  "categoryScores": {
-    "resumeStructure": 90,
-    "technicalSkills": 85,
-    "projects": 80,
-    "experience": 75,
-    "education": 90,
-    "achievements": 80,
-    "impact": 75,
-    "roleReadiness": 85
-  },
-  "detectedRoles": ["Full-Stack & Frontend Developer"],
+  "score": 85,
+  "targetRole": "${targetRole || candidateProfile?.detectedRole || 'Software Development Engineer'}",
+  "categories": [
+    { "name": "Resume Structure", "weight": "15%", "score": 90, "weightedScore": 14, "explanation": "Section layout and scannability." },
+    { "name": "Technical Skills", "weight": "20%", "score": 85, "weightedScore": 17, "explanation": "Languages, frameworks, databases, and developer tools." },
+    { "name": "Projects", "weight": "20%", "score": 80, "weightedScore": 16, "explanation": "Project scope, technical depth, and practical execution." },
+    { "name": "Experience & Internships", "weight": "15%", "score": 75, "weightedScore": 11, "explanation": "Work history and professional experience alignment." },
+    { "name": "Education", "weight": "10%", "score": 90, "weightedScore": 9, "explanation": "Degree relevance and academic background." },
+    { "name": "Achievements & Impact", "weight": "10%", "score": 75, "weightedScore": 8, "explanation": "Quantifiable achievements and metric evidence." },
+    { "name": "Role Readiness", "weight": "10%", "score": 85, "weightedScore": 8, "explanation": "Overall readiness for target technical role." }
+  ],
+  "matchedSkills": ["JavaScript", "React.js", "Node.js", "SQL"],
+  "partialMatches": ["TypeScript"],
+  "missingSkills": ["Docker", "AWS"],
   "strengths": ["Clear project evidence building responsive applications...", "..."],
-  "weaknesses": ["Lack of quantifiable percentage metrics in project descriptions...", "..."],
-  "missingElements": ["Cloud infrastructure deployment evidence...", "..."],
-  "recommendations": ["Incorporate quantifiable impact metrics in project bullets...", "..."],
-  "detectedSkills": ["JavaScript", "TypeScript", "React.js", "Node.js"],
-  "projectInsights": ["Project 1 demonstrates good technical integration..."],
-  "experienceInsights": ["Work history indicates hands-on development experience..."],
-  "summary": "High-level summary of candidate resume ATS readiness."
+  "suggestions": ["Incorporate quantifiable impact metrics in project bullets...", "..."],
+  "evidence": ["Developed a real-time web portal with React.js..."],
+  "semanticSummary": "High-level summary of candidate ATS readiness and technical alignment."
 }`;
 
         const rawAiOutput = await callGeminiApi(apiKey, prompt);
@@ -226,40 +238,42 @@ Return ONLY a JSON object matching this exact schema:
 
         const parsedResult = JSON.parse(cleanedJsonText);
 
-        if (validateGeminiResumeAtsResponse(parsedResult)) {
-          const overall = parsedResult.overallScore || 80;
+        if (validateGeminiAtsResponse(parsedResult)) {
+          const overall = parsedResult.score !== undefined ? parsedResult.score : (parsedResult.overallScore || 80);
           parsedResult.score = overall;
+          parsedResult.overallScore = overall;
           parsedResult.matchScore = overall;
-          parsedResult.targetRole = parsedResult.detectedRoles?.[0] || candidateProfile?.detectedRole || 'Software Development Engineer';
+          parsedResult.targetRole = parsedResult.targetRole || candidateProfile?.detectedRole || 'Software Development Engineer';
           parsedResult.aiEnhanced = true;
           parsedResult.isFallback = false;
           parsedResult.source = 'Gemini 2.5 Flash AI';
 
-          const cats = parsedResult.categoryScores || {};
-          parsedResult.categories = [
-            { name: 'Resume Structure', weight: '15%', score: cats.resumeStructure || 85, weightedScore: Math.round((cats.resumeStructure || 85) * 0.15), explanation: 'Section layout, formatting, and scannability.' },
-            { name: 'Technical Skills', weight: '20%', score: cats.technicalSkills || 85, weightedScore: Math.round((cats.technicalSkills || 85) * 0.20), explanation: 'Languages, frameworks, databases, and developer tools.' },
-            { name: 'Projects', weight: '20%', score: cats.projects || 80, weightedScore: Math.round((cats.projects || 80) * 0.20), explanation: 'Project scope, technical depth, and practical execution.' },
-            { name: 'Experience & Internships', weight: '15%', score: cats.experience || 75, weightedScore: Math.round((cats.experience || 75) * 0.15), explanation: 'Work history and professional experience alignment.' },
-            { name: 'Education', weight: '10%', score: cats.education || 90, weightedScore: Math.round((cats.education || 90) * 0.10), explanation: 'Degree relevance and academic background.' },
-            { name: 'Achievements & Impact', weight: '10%', score: cats.impact || cats.achievements || 75, weightedScore: Math.round((cats.impact || 75) * 0.10), explanation: 'Quantifiable achievements and metric evidence.' },
-            { name: 'Role Readiness', weight: '10%', score: cats.roleReadiness || 85, weightedScore: Math.round((cats.roleReadiness || 85) * 0.10), explanation: 'Overall readiness for target technical role.' }
-          ];
+          if (!parsedResult.categories || parsedResult.categories.length === 0) {
+            parsedResult.categories = [
+              { name: 'Resume Structure', weight: '15%', score: 85, weightedScore: 13, explanation: 'Section layout and formatting.' },
+              { name: 'Technical Skills', weight: '20%', score: overall, weightedScore: Math.round(overall * 0.20), explanation: 'Technical domain alignment.' },
+              { name: 'Projects', weight: '20%', score: 80, weightedScore: 16, explanation: 'Practical project execution.' },
+              { name: 'Experience & Internships', weight: '15%', score: 75, weightedScore: 11, explanation: 'Work history alignment.' },
+              { name: 'Education', weight: '10%', score: 90, weightedScore: 9, explanation: 'Academic background.' },
+              { name: 'Achievements & Impact', weight: '10%', score: 75, weightedScore: 8, explanation: 'Quantifiable achievements.' },
+              { name: 'Role Readiness', weight: '10%', score: 85, weightedScore: 8, explanation: 'Overall readiness.' }
+            ];
+          }
 
           return res.status(200).json({
             success: true,
             data: parsedResult
           });
         } else {
-          console.warn('[atsController] Gemini Resume ATS response failed schema validation. Using fallback.');
+          console.warn('[atsController] Gemini ATS response failed schema validation. Using fallback.');
         }
       } catch (geminiErr) {
         console.warn('[atsController] Gemini API call error:', geminiErr.message);
       }
     }
 
-    // 2. Fallback Resume ATS Engine
-    const fallbackResult = evaluateDeterministicResumeAts(resumeText, candidateProfile);
+    // 2. Fallback Resume ATS Engine (Explicitly marked as API Offline Fallback)
+    const fallbackResult = evaluateDeterministicAts(resumeText, candidateProfile, targetRole, jobDescription);
 
     res.status(200).json({
       success: true,
@@ -268,7 +282,7 @@ Return ONLY a JSON object matching this exact schema:
   } catch (err) {
     res.status(500).json({
       success: false,
-      error: 'Resume ATS Analysis failed: ' + err.message
+      error: 'ATS Analysis failed: ' + err.message
     });
   }
 };

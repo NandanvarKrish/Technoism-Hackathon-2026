@@ -246,7 +246,12 @@ window.AiService = {
 
   // Isolated Task Function: Generate Role-Specific Interview Questions
   async generateInterviewQuestions(targetRole, jobDescription, resumeText, questionCount = 3) {
-    const cacheKey = this.generateCacheHash(`qgen_${targetRole}_${questionCount}`, jobDescription);
+    const appState = window.AppState ? window.AppState.getState() : {};
+    const candidateProfile = appState.candidateProfile || {};
+    const atsResult = appState.atsResult || {};
+    const detectedRole = appState.detectedRole || targetRole || candidateProfile.detectedRole || 'Software Engineering Candidate';
+
+    const cacheKey = this.generateCacheHash(`qgen_${detectedRole}_${questionCount}`, candidateProfile.name || 'candidate');
     try {
       const cached = localStorage.getItem(cacheKey);
       if (cached) {
@@ -255,16 +260,15 @@ window.AiService = {
       }
     } catch (e) {}
 
-    // Simulated / API Call with Single Retry & Schema Validation
     try {
-      const result = await this.executeQuestionGenerationRequest(targetRole, jobDescription, resumeText, questionCount);
+      const result = await this.executeQuestionGenerationRequest(detectedRole, candidateProfile, atsResult, resumeText, questionCount);
       try {
         localStorage.setItem(cacheKey, JSON.stringify({ questions: result }));
       } catch (e) {}
       return result;
     } catch (err) {
       console.warn('AI Question generation notice (falling back to prepared role questions):', err.message);
-      return this.getFallbackQuestions(targetRole, questionCount);
+      return this.getFallbackQuestions(detectedRole, questionCount);
     }
   },
 
@@ -303,12 +307,13 @@ window.AiService = {
   },
 
   // Internal Question Generation with Backend REST API Attempt & Fallback
-  async executeQuestionGenerationRequest(targetRole, jobDescription, resumeText, count = 3, isRetry = false) {
+  async executeQuestionGenerationRequest(detectedRole, candidateProfile, atsResult, resumeText, count = 3, isRetry = false) {
     // 1. Attempt Node.js / Express Backend API call
     try {
       const apiResponse = await this.fetchFromApi('/interview/generate', {
-        targetRole,
-        jobDescription,
+        detectedRole,
+        candidateProfile,
+        atsResult,
         resumeText,
         questionCount: count
       });
