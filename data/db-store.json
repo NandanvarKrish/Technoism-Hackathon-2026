@@ -44,6 +44,18 @@
       "candidateName": "Nandan Shah",
       "targetRole": "Full-Stack Developer",
       "updated_at": "2026-08-09T10:10:57.613Z"
+    },
+    "sess_test": {
+      "id": "sess_test",
+      "user_id": "anonymous_candidate",
+      "resumeCompleted": true,
+      "atsCompleted": false,
+      "generalInterviewCompleted": false,
+      "codingRoundStarted": false,
+      "codingRoundCompleted": false,
+      "finalReportAvailable": false,
+      "created_at": "2026-08-09T10:27:25.421Z",
+      "updated_at": "2026-08-09T10:27:36.480Z"
     }
   },
   "resumes": {
@@ -76,6 +88,16 @@
       "char_count": 765,
       "word_count": 97,
       "created_at": "2026-08-09T10:10:57.586Z"
+    },
+    "sess_test": {
+      "id": "res_1786271256480",
+      "session_id": "sess_test",
+      "file_name": "test.exe",
+      "file_type": "exe",
+      "extracted_text": "",
+      "char_count": 0,
+      "word_count": 1,
+      "created_at": "2026-08-09T10:27:36.480Z"
     }
   },
   "candidateProfiles": {
