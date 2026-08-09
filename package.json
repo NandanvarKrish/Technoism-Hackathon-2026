@@ -1,0 +1,27 @@
+{
+  "name": "tech-titans",
+  "version": "1.0.0",
+  "description": "Fully Functional AI-Powered Interview Preparation Web Application",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "server": "node server/server.js",
+    "client": "npm --prefix client run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "seed": "node scripts/import-company-questions.js"
+  },
+  "keywords": [
+    "ai",
+    "interview-prep",
+    "resume-ats",
+    "gemini",
+    "supabase",
+    "tech-titans"
+  ],
+  "author": "Tech Titans Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
