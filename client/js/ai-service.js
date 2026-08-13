@@ -274,14 +274,18 @@ window.AiService = {
 
   // Centralized Backend API Fetcher
   async fetchFromApi(endpoint, bodyData, options = {}) {
-    const baseUrl = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL) 
-      ? window.APP_CONFIG.API_BASE_URL 
-      : 'http://localhost:5000/api';
-      
+    const baseUrl = (window.APP_CONFIG && window.APP_CONFIG.API_BASE_URL)
+      ? window.APP_CONFIG.API_BASE_URL
+      : '/api';
+
+    const timeoutMs = (window.APP_CONFIG && window.APP_CONFIG.REQUEST_TIMEOUT_MS)
+      ? window.APP_CONFIG.REQUEST_TIMEOUT_MS
+      : 30000;
+
     const url = `${baseUrl}${endpoint}`;
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 6000);
-    
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
     try {
       const response = await fetch(url, {
         method: options.method || 'POST',
@@ -293,15 +297,27 @@ window.AiService = {
         signal: controller.signal
       });
       clearTimeout(timeoutId);
-      
+
       if (!response.ok) {
-        throw new Error(`API HTTP Error: ${response.status}`);
+        const errorBody = await response.text().catch(() => '');
+        throw new Error(`HTTP ${response.status}: ${errorBody || response.statusText}`);
       }
-      
+
       const json = await response.json();
       return json;
     } catch (err) {
       clearTimeout(timeoutId);
+      // Classify error type for better upstream handling
+      if (err.name === 'AbortError') {
+        const e = new Error(`Request timeout after ${timeoutMs}ms — server may be slow or unreachable.`);
+        e.type = 'timeout';
+        throw e;
+      }
+      if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('ERR_CONNECTION_REFUSED') || err.message.includes('NetworkError'))) {
+        const e = new Error('Network error — backend server is not running or not reachable.');
+        e.type = 'network';
+        throw e;
+      }
       throw err;
     }
   },
@@ -356,9 +372,6 @@ window.AiService = {
     const appState = window.AppState ? window.AppState.getState() : {};
     const candidateProfile = candidateProfileInput || appState.candidateProfile || {};
 
-    // Cache key is tied to this specific resume text — a new upload bypasses any old cache
-    const cacheKey = this.generateCacheHash(resumeText, candidateProfile.name || 'candidate');
-
     // Attempt backend API call first (Gemini runs server-side)
     try {
       const apiResponse = await this.fetchFromApi('/ats/analyze', {
@@ -366,38 +379,44 @@ window.AiService = {
         candidateProfile
       });
       if (apiResponse && apiResponse.success && apiResponse.data) {
-        const data = apiResponse.data;
-        // Only cache and return if it's a real AI result
-        if (data.isFallback !== true) {
-          try { localStorage.setItem(cacheKey, JSON.stringify(data)); } catch (e) {}
-        }
-        return data;
+        // Return whatever the server says — it may be a real result or an explicitly-labeled fallback
+        return apiResponse.data;
       }
+      // Server responded but with unexpected shape
+      throw new Error('Unexpected server response shape from /ats/analyze');
     } catch (apiErr) {
-      console.warn('[ATS] Backend API unavailable:', apiErr.message);
-    }
+      const errType = apiErr.type || 'unknown';
+      console.warn(`[ATS] Backend API call failed (${errType}):`, apiErr.message);
 
-    // Explicit fallback: backend was unreachable (network error, server down)
-    // This is clearly labeled and NOT presented as a Gemini result
-    const detectedRole = candidateProfile.detectedRole || 'Software Development Candidate';
-    const fallbackResult = {
-      score: null,
-      overallScore: null,
-      targetRole: detectedRole,
-      categories: [],
-      matchedSkills: candidateProfile.skills || [],
-      partialMatches: [],
-      missingSkills: [],
-      strengths: [],
-      suggestions: ['Connect the backend server to receive AI-powered analysis.'],
-      evidence: [],
-      semanticSummary: '',
-      aiEnhanced: false,
-      isFallback: true,
-      fallbackReason: 'Backend server unreachable — AI analysis unavailable.',
-      source: 'AI Analysis Unavailable (Server Offline)'
-    };
-    return fallbackResult;
+      // Return explicit client-side fallback — clearly labeled, never shown as AI success
+      const detectedRole = candidateProfile.detectedRole || 'Software Development Candidate';
+      let fallbackReason;
+      if (errType === 'network') {
+        fallbackReason = 'Backend server is not running. Start the server with: node server/server.js';
+      } else if (errType === 'timeout') {
+        fallbackReason = 'Request timed out — server may be overloaded. Please retry.';
+      } else {
+        fallbackReason = `Server error: ${apiErr.message}`;
+      }
+
+      return {
+        score: null,
+        overallScore: null,
+        targetRole: detectedRole,
+        categories: [],
+        matchedSkills: candidateProfile.skills || [],
+        partialMatches: [],
+        missingSkills: [],
+        strengths: [],
+        suggestions: ['Start the backend server and click Retry Analysis.'],
+        evidence: [],
+        semanticSummary: '',
+        aiEnhanced: false,
+        isFallback: true,
+        fallbackReason,
+        source: 'AI Analysis Unavailable (Server Offline)'
+      };
+    }
   },
 
   async executeAiRequestWithRetry(resumeText, jobDescription, targetRole, fallbackData, isRetry = false) {

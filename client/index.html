@@ -239,14 +239,20 @@
           </button>
         </div>
 
-        <!-- AI Offline Retry Area (shown only when backend is unreachable) -->
+        <!-- AI Offline / Gemini Retry Area (shown only when analysis fails) -->
         <div id="ats-retry-area" style="display:none; background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.25); padding:0.9rem 1.25rem; border-radius:var(--radius-sm); margin-bottom:1.5rem;">
-          <div style="display:flex; align-items:center; gap:0.75rem;">
-            <i class="fa-solid fa-triangle-exclamation" style="color:#991b1b; font-size:1.1rem;"></i>
-            <div style="font-size:0.85rem; color:#991b1b; line-height:1.4; flex:1;">
-              <strong>AI Analysis Unavailable.</strong> The backend server could not be reached. Start the server and retry.
+          <div style="display:flex; align-items:flex-start; gap:0.75rem;">
+            <i class="fa-solid fa-triangle-exclamation" style="color:#991b1b; font-size:1.1rem; margin-top:0.15rem; flex-shrink:0;"></i>
+            <div style="flex:1;">
+              <div style="font-size:0.85rem; color:#991b1b; line-height:1.5;" id="ats-retry-message">
+                <strong>AI Analysis Unavailable.</strong> Backend server could not be reached. Start the server and retry.
+              </div>
+              <div style="font-size:0.78rem; color:var(--color-text-muted); margin-top:0.4rem;">
+                Run: <code style="background:rgba(0,0,0,0.06); padding:0.1rem 0.4rem; border-radius:3px;">node server/server.js</code>
+                &nbsp;&bull;&nbsp; Open: <code style="background:rgba(0,0,0,0.06); padding:0.1rem 0.4rem; border-radius:3px;">http://localhost:5000</code>
+              </div>
             </div>
-            <button class="btn btn-secondary btn-sm" id="btn-ats-retry"><i class="fa-solid fa-rotate-right"></i> Retry Analysis</button>
+            <button class="btn btn-secondary btn-sm" id="btn-ats-retry" style="flex-shrink:0; white-space:nowrap;"><i class="fa-solid fa-rotate-right"></i> Retry Analysis</button>
           </div>
         </div>
 

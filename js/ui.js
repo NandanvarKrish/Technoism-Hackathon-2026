@@ -123,15 +123,15 @@ window.UIController = {
     const result = state.atsResult;
     if (!result) return;
 
+    const isServerFallback = result.isFallback === true && (result.score === null || result.score === undefined);
+    const isGeminiOffline = isServerFallback && result.fallbackReason && result.fallbackReason.toLowerCase().includes('gemini');
+    const isNetworkError = isServerFallback && !isGeminiOffline;
+
     // AI Resume ATS Score Number — show '--' when fallback has no real score
     const scoreElem = document.getElementById('ats-score-number');
     const rawScore = result.score ?? result.overallScore ?? result.matchScore;
     if (scoreElem) {
-      if (result.isFallback && (rawScore === null || rawScore === undefined)) {
-        scoreElem.textContent = '--';
-      } else {
-        scoreElem.textContent = rawScore;
-      }
+      scoreElem.textContent = isServerFallback ? '--' : (rawScore ?? '--');
     }
 
     // Primary Detected Role & Source Badge Label
@@ -141,23 +141,38 @@ window.UIController = {
       'Software Development Candidate';
 
     const isAiResult = result.aiEnhanced === true && !result.isFallback;
-    const sourceText = isAiResult
-      ? 'Gemini AI Resume Analysis'
-      : (result.isFallback ? (result.fallbackReason || 'AI Analysis Unavailable') : (result.source || 'AI Resume Analysis'));
 
     if (roleElem) {
-      if (result.isFallback && result.score === null) {
-        // Offline/error state — show warning instead of fake data
-        roleElem.innerHTML = `<span class="skill-tag" style="font-size:0.8rem; color:#991b1b; background:rgba(239,68,68,0.1); border-color:rgba(239,68,68,0.3);"><i class="fa-solid fa-triangle-exclamation"></i> ${sourceText}</span>`;
+      if (isServerFallback) {
+        // Show detected role (from profile) even in error state, so user sees their name/role
+        const roleHint = state.candidateProfile ? state.candidateProfile.detectedRole : null;
+        if (roleHint) {
+          roleElem.innerHTML = `Detected Role: <strong>${roleHint}</strong> &bull; <span class="skill-tag" style="font-size:0.75rem; vertical-align:middle; color:#991b1b; background:rgba(239,68,68,0.08); border-color:rgba(239,68,68,0.25);"><i class="fa-solid fa-triangle-exclamation"></i> AI Offline</span>`;
+        } else {
+          roleElem.innerHTML = `<span class="skill-tag" style="font-size:0.8rem; color:#991b1b; background:rgba(239,68,68,0.1); border-color:rgba(239,68,68,0.3);"><i class="fa-solid fa-triangle-exclamation"></i> AI Analysis Unavailable</span>`;
+        }
       } else {
-        roleElem.innerHTML = `Detected Role: <strong>${primaryRole}</strong> &bull; <span class="skill-tag ${isAiResult ? 'matched' : ''}" style="font-size:0.75rem; vertical-align:middle; font-weight:600;"><i class="fa-solid ${isAiResult ? 'fa-wand-magic-sparkles' : 'fa-circle-info'}"></i> ${sourceText}</span>`;
+        roleElem.innerHTML = `Detected Role: <strong>${primaryRole}</strong> &bull; <span class="skill-tag ${isAiResult ? 'matched' : ''}" style="font-size:0.75rem; vertical-align:middle; font-weight:600;"><i class="fa-solid ${isAiResult ? 'fa-wand-magic-sparkles' : 'fa-circle-info'}"></i> ${isAiResult ? 'Gemini AI Resume Analysis' : (result.source || 'AI Resume Analysis')}</span>`;
       }
     }
 
-    // Show retry button if AI was unavailable
+    // Show/hide retry area and populate the dynamic message
     const retryBtnArea = document.getElementById('ats-retry-area');
+    const retryMsg = document.getElementById('ats-retry-message');
     if (retryBtnArea) {
-      retryBtnArea.style.display = (result.isFallback && result.score === null) ? 'block' : 'none';
+      retryBtnArea.style.display = isServerFallback ? 'block' : 'none';
+    }
+    if (retryMsg && isServerFallback) {
+      if (isGeminiOffline) {
+        retryMsg.innerHTML = `<strong>Gemini AI not configured.</strong> ${result.fallbackReason || 'Add your GEMINI_API_KEY to the .env file and restart the server.'}`;
+        // Also update the hint below
+        const hintDiv = retryMsg.parentElement ? retryMsg.parentElement.querySelector('div[style*="color:var(--color-text-muted)"]') : null;
+        if (hintDiv) {
+          hintDiv.innerHTML = 'Set <code style="background:rgba(0,0,0,0.06); padding:0.1rem 0.4rem; border-radius:3px;">GEMINI_API_KEY=your_key</code> in the <code style="background:rgba(0,0,0,0.06); padding:0.1rem 0.4rem; border-radius:3px;">.env</code> file, then restart the server.';
+        }
+      } else {
+        retryMsg.innerHTML = `<strong>Backend server unreachable.</strong> ${result.fallbackReason || 'Start the server with: node server/server.js'}`;
+      }
     }
 
     // Category Breakdown List

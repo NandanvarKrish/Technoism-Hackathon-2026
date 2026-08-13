@@ -45,9 +45,16 @@ app.use((err, req, res, next) => {
 
 // Start Express Server
 app.listen(PORT, () => {
+  const geminiConfigured = Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim().length > 10);
   console.log(`==================================================`);
   console.log(`🚀 TECH TITANS API SERVER RUNNING ON PORT ${PORT}`);
   console.log(`📡 Health Check URL: http://localhost:${PORT}/api/health`);
   console.log(`🌐 Static Client URL: http://localhost:${PORT}`);
+  console.log(`🤖 Gemini AI configured: ${geminiConfigured ? '✅ YES' : '❌ NO — set GEMINI_API_KEY in .env'}`);
   console.log(`==================================================`);
+  if (!geminiConfigured) {
+    console.warn(`⚠️  WARNING: GEMINI_API_KEY is not set.`);
+    console.warn(`   ATS analysis will return an offline fallback.`);
+    console.warn(`   Add GEMINI_API_KEY=your_key to the .env file and restart.`);
+  }
 });
